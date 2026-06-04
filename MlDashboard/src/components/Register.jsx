@@ -1,0 +1,149 @@
+import './styles/AuthForm.css'
+
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { registerUser, loginUser } from "../services/api";
+
+
+function AuthForm (){
+    const [isLogin, setIsLogin] = useState(true);
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: ""
+    });
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (isLogin) {
+            // Login flow
+            try {
+                const loginData = await loginUser({
+                    email: formData.email,
+                    password: formData.password
+                });
+                if (loginData.error) {
+                    alert(loginData.error);
+                    return;
+                }
+                const user = loginData.user || {
+                    id: loginData.user_id,
+                    username: loginData.username,
+                    email: formData.email,
+                };
+
+                if (!user.id) {
+                    alert("Login response is missing user details.");
+                    return;
+                }
+                // 
+                localStorage.setItem("user", 
+                    JSON.stringify(user)); 
+                    alert("Login successful!");
+                    console.log(localStorage.getItem("user"))
+                    navigate("/dashboard")
+                // Handle successful login (e.g., store token, redirect)
+            } catch (error) {
+                console.error("Login Error:", error);   
+                // Handle login error
+            }
+        } else {
+            // Registration flow
+            try {
+                const registrationData = await registerUser(
+                    formData);
+                    if (registrationData.error) {
+                        alert(registrationData.error);
+                        return;
+                    }
+                    console.log("Registration successful:", registrationData);
+                alert("Registration successful! Please login.");
+                setIsLogin(true); // Switch to login after successful registration
+            }
+            catch (error) {
+                console.error("Registration Error:", error);
+                alert("Registration failed. Please try again.");
+                // Handle registration error
+  
+            }
+        }
+    };
+
+
+
+    return  (
+        <div className="auth-container">
+            <div className="auth-box">
+                {/*Login Section */}
+                <div className="login-section">
+                    <h2>{isLogin ? "Login" : "Register"}</h2>
+                    <p>Welcome back! Please login to your account.</p>
+
+                    <form onSubmit={handleSubmit}>
+                        {!isLogin && (
+                            <div className="input-group">
+                                <label>Username</label>
+                                <input 
+                                    type="text"
+                                    name='username'
+                                    placeholder="Enter your username."
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        )}
+
+
+                        <div className="input-group">
+                            <label>Email</label>
+                            <input 
+                                type = "email" 
+                                name = "email"
+                                placeholder="Enter your email..."
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label>Password</label>
+                            <input 
+                                type="password"
+                                name="password" 
+                                placeholder="Enter your password" 
+                                value={formData.password}
+                                onChange={handleChange}
+                            />  
+                        </div>
+
+                        <button type = "submit" className="login-btn">
+                                {isLogin ?  "Login" : "Register"}
+                        </button>
+                    </form>
+
+                    <p className="toggle-text">
+                        {isLogin 
+                        ? "Don't have an account?"
+                        : "Already have an account?"}
+
+                        <span 
+                        className="toggle-link" 
+                        onClick={() => setIsLogin(!isLogin)}
+                        >
+                            {isLogin ? <a href="#"> Register here.</a>  : <a href="#"> Login here.</a>}
+                        </span>
+                    </p>
+                </div>          
+            </div>
+        </div>
+    
+    ) 
+};
+
+
+export default AuthForm;

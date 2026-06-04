@@ -1,0 +1,68 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: #161d2d;
+  color: white;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.logo {
+  color: #38bdf8;
+  margin-bottom: 20px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.menu li {
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: 0.3s;
+}
+
+.menu li:hover {
+  background: #1e293b;
+}
+
+.menu li.active {
+  background: #38bdf8;
+  color: black;
+  font-weight: bold;
+}
+
+.section-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-group label {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.section-group select,
+.section-group input {
+  padding: 6px;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: #38bdf8;
+  cursor: pointer;
+}
+
+.btn.train {
+  background: #22c55e;
+}

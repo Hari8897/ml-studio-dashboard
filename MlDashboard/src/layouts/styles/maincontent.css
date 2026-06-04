@@ -1,0 +1,210 @@
+
+.section-group {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-group h3 {
+    font-size: 24px;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+.section-group p {
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.search-filter-box {
+    display: flex;
+    width: 80%;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.search-filter-box label {
+    font-size: 14px;
+    color: #0f172a;
+    min-width: 80px;
+    padding: auto;
+}
+
+.search-filter-box input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #9fa5b0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.search-filter-box select {
+    padding: 8px;
+    border: 1px solid #9fa5b0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.row-info {
+    display: flex;
+    width: 40%;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+
+/* preprocessing section */
+
+.preprocess-header h3 {   
+    font-size: 24px;
+    color: #0f172a;
+    margin-bottom: 15px;    
+}
+
+.preprocess-button {
+    background-color: #009578;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.preprocess-button:hover {
+    background-color: #007a63;
+}
+
+.preprocess-info {
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    background: #f3f4f6;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.preprocess-body{
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+
+.section-group label {
+   font-size: 14px;
+    color: #0f172a;
+    min-width: 80px;
+    padding: auto;
+    font-weight: bold;
+}
+
+.section-group select {
+    padding: 8px;
+    border: 1px solid #9fa5b0;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px;
+}
+
+section.section-group-missing h4 {
+    font-size: 14px;
+    color: #0f172a;
+    min-width: 80px;
+    padding: auto;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+section.section-group-missing-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+section.section-group-missing-options label {
+    font-size: 14px;
+    color: #0f172a;
+    min-width: 100px;
+    padding: auto;
+    font-weight: bold;
+}
+
+section.section-group-missing-options select {
+    padding: 8px;
+    border: 1px solid #9fa5b0;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px;
+}
+
+/* results section */
+
+.main-content h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.section-group-results {
+    display: flex;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-group-results label{
+    font-weight: bold;
+    margin: 10px;
+
+}
+
+.section-group-results select {
+    width: 180px;
+    padding: 10px;
+    border-radius: 5px;
+    height: 50px;
+}
+
+.result-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-train {
+    background-color: #009578;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.btn-train:hover {
+    background-color: #007a63;
+}

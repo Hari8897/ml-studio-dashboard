@@ -1,0 +1,95 @@
+body {
+    margin:10;
+    padding: 10;
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+.auth-container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-box {
+    display: flex;
+    width: 900px;
+    padding: 10px;
+    margin-top: 100px;
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0,0,0.2);
+}
+
+.login-section, .register-section {
+    flex: 1;
+    
+    padding: 40px auto;
+}
+
+.login-section{ 
+    background-color:#ffffff;
+}
+
+.register-section {
+    background-color: white;
+    color: black;
+}
+
+h2 {
+    margin-bottom:10px ;
+}
+
+p {
+    margin-bottom:30px ;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.input-group input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.login-btn {
+    background-color: #2563eb;
+    color: white;
+}
+
+.login-btn:hover {
+    background-color: #1d4ed8;
+}
+
+
+.register-btn:hover {
+    background-color: #f1f1f1;
+}
+
+@media  screen and (max-width:780px) {
+    .auth-box{
+        flex-direction: column;
+        width: 100%;
+    }
+    
+}
+
+p.toggle-text {
+    margin-top: 10px;
+}
+
+span.toggle-link {
+    color: #2563eb;
+    cursor: pointer;
+}

@@ -1,0 +1,15 @@
+.table-box {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-title {
+    font-size: 18px;
+    color: #0f172a;
+    margin: 10px 10px 15px 10px;
+}
+
+
+
