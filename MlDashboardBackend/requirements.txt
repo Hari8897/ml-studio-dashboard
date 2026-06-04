@@ -10,6 +10,7 @@ cycler==0.12.1
 fastapi==0.121.3
 fonttools==4.60.1
 greenlet==3.2.4
+gunicorn==26.0.0
 h11==0.16.0
 idna==3.11
 joblib==1.5.2
