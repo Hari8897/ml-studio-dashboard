@@ -1,18 +1,13 @@
-import urllib
+
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm  import sessionmaker, declarative_base
 
 
-connectionString = (
-    "Driver={ODBC Driver 17 for SQL Server};"
-    "Server=HARIKANCHU;"
-    "Database=DataScience;"
-    "Trusted_Connection=yes;"
-    
-    )
+DATABASE_URL = "postgresql://postgres:Hari1234@localhost:5432/ml_dashboard_db"
 
-params = urllib.parse.quote_plus(connectionString)
-engine = create_engine(f"mssql+pyodbc:///?odbc_connect={params}")
+engine = create_engine(DATABASE_URL, pool_pre_ping=True, echo=True)
+
+
 
 SessionLocal = sessionmaker(
     autocommit = False,
@@ -39,7 +34,8 @@ def ensure_database_schema():
         dataset_columns.add("user_id")
     if "username" not in dataset_columns:
         statements.append("ALTER TABLE datasets ADD username VARCHAR(100) NULL")
-        dataset_columns.add("username")    
+        dataset_columns.add("username")  
+          
 
     with engine.begin() as connection:
         for statement in statements:
@@ -52,11 +48,20 @@ def ensure_database_schema():
         ):
             connection.execute(text("""
                 UPDATE datasets
-                SET datasets.username = users.username
-                FROM datasets
-                INNER JOIN users ON datasets.user_id = users.id
-                WHERE datasets.username IS NULL
+                SET username = users.username
+                FROM users
+                WHERE datasets.user_id = users.id
+                AND datasets.username IS NULL
             """))
+            
+    #inspector = inspect(engine)
+
+try:
+    with engine.connect() as connection:
+        connection.execute(text("SELECT 1"))
+except Exception as e:
+    print(f"Database connection failed: {e}")
+    raise
 
 def get_db():
     db = SessionLocal()
