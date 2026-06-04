@@ -1,12 +1,19 @@
 
+import os
+
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm  import sessionmaker, declarative_base
 
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = "postgresql+psycopg2://postgres:Hari1234@localhost:5432/ml_dashboard_db"
-engine = create_engine(DATABASE_URL, pool_pre_ping=True, echo=True)
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is missing")
 
-
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    echo=True
+)
 
 SessionLocal = sessionmaker(
     autocommit = False,
