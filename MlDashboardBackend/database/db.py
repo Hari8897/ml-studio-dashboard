@@ -3,13 +3,22 @@ import os
 
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm  import sessionmaker, declarative_base
-import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+env_path = Path(__file__).parent.parent / ".env"
+
+load_dotenv(env_path) 
+
+#print("DATABASE_URL: ", os.getenv("DATABASE_URL"))  # Debugging line to check if DATABASE_URL is loaded correctly 
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+
+# print("DATABASE_URL after loading: ", DATABASE_URL)  # Debugging line to check if DATABASE_URL is loaded correctly after loading .env file 
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL environment variable is not set")
-
+  
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
