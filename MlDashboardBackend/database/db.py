@@ -7,26 +7,22 @@ import os
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-<<<<<<< HEAD
 if not DATABASE_URL:
-    raise ValueError("DATABASE_URL environment variable is missing")
-=======
-DATABASE_URL = os.getenv("DATABASE_URL")
->>>>>>> 29df990241d358a0c454d51e4ea5cfe37c4ae6ed
+    raise ValueError("DATABASE_URL environment variable is not set")
+
+DATABASE_URL= os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost:5432/postgres")
+
 
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
     echo=True
 )
-<<<<<<< HEAD
 
 SessionLocal = sessionmaker(
     autocommit = False,
     autoflush=False,
     bind=engine)
-=======
->>>>>>> 29df990241d358a0c454d51e4ea5cfe37c4ae6ed
 
 Base = declarative_base()
 
