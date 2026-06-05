@@ -233,11 +233,11 @@ async def traiModel( data: TrainRequest):
         return {"error":str(e)} 
     
     
-app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")  
+# app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")  
 
-app.get("/{full_path:path}")
-async def serve_react(full_path: str):
-    return FileResponse("dist/index.html")
+# app.get("/{full_path:path}")
+# async def serve_react(full_path: str):
+#     return FileResponse("dist/index.html")
 
 
 
