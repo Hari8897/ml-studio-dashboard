@@ -12,6 +12,10 @@ uploads/
 
 # Environment
 .env
+.env.*
+
+# Visual Studio
+.vs/
 
 # VS Code
 .vscode/
