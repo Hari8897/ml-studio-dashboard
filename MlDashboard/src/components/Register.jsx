@@ -31,13 +31,15 @@ function AuthForm (){
                     alert(loginData.error);
                     return;
                 }
-                const user = loginData.user || {
-                    id: loginData.user_id,
-                    username: loginData.username,
-                    email: formData.email,
-                };
+                console.log("Login Response:", loginData);
+                const user = loginData.user; 
+                
 
-                if (!user.id) {
+                console.log("Login Data:", loginData);
+                console.log("User:", user);
+
+                if (!user || !user.id) {
+                    console.error("Login response: ", loginData);
                     alert("Login response is missing user details.");
                     return;
                 }
