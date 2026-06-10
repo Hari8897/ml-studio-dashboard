@@ -28,7 +28,7 @@ function AuthForm (){
                     password: formData.password
                 });
                 alert(JSON.stringify(loginData, null, 2))
-                //console.log("Login Data:", loginData);
+                // console.log("Login Data:", loginData);
                 
                 if (loginData.error) {
                     alert(loginData.error);
@@ -49,9 +49,11 @@ function AuthForm (){
                 // 
                 localStorage.setItem("user", 
                     JSON.stringify(user)); 
-                    alert("Login successful!");
-                    console.log(localStorage.getItem("user"))
-                    navigate("/dashboard")
+                alert("Login successful!");
+                alert("Reached here successfully");
+
+                console.log(localStorage.getItem("user"))
+                navigate("/dashboard")
                 // Handle successful login (e.g., store token, redirect)
             } catch (error) {
                 console.error("Login Error:", error);   
