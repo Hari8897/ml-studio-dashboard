@@ -53,7 +53,7 @@ def register(
 
         db.refresh(new_user)
         
-        print("Registered user:", new_user.username)
+        #print("Registered user:", new_user.username)
 
         return {
             "message": "Registered Successfully"

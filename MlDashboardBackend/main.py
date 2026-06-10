@@ -30,8 +30,8 @@ Base.metadata.create_all(bind=engine)
 ensure_database_schema()
 
 origins =[
-    "http://localhost:5172",
-    "http://127.0.0.1:8000"
+    "http://localhost:5173",
+    "https://ml-studio-dashboard-2-law6.onrender.com"
     ]
 
 app.add_middleware(
@@ -79,11 +79,9 @@ dataStore = {}
 app.include_router(auth_router, prefix="/auth")
 
 @app.post("/upload")
-async def upload(user_id: int = Form(...), file: UploadFile = File(...)): 
-    
+async def upload(user_id: int = Form(...), file: UploadFile = File(...)):     
     print("Received file:", file.filename)
     print("Content type:", file.content_type)
-
     try:
         contents = await file.read()  # async read  
         filename = file.filename.lower()
@@ -217,7 +215,7 @@ async def correlation(file: UploadFile=File(...)):
 
 @app.post("/train")
 async def traiModel( data: TrainRequest):
-    print("Received Raw Data:",data)
+    #print("Received Raw Data:",data)
     #return {"message":"received"}
     try:
         X = pd.DataFrame(data.features, columns=data.featureNames)
