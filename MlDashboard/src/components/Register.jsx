@@ -27,6 +27,7 @@ function AuthForm (){
                     email: formData.email,
                     password: formData.password
                 });
+                alert(JSON.stringify(loginData))
                 if (loginData.error) {
                     alert(loginData.error);
                     return;
@@ -39,7 +40,7 @@ function AuthForm (){
                 console.log("User:", user);
 
                 if (!user || !user.id) {
-                    console.error("Login response: ", loginData);
+                    console.error("Login response: ", loginData);b
                     alert("Login response is missing user details.");
                     return;
                 }
