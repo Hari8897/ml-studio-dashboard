@@ -29,13 +29,14 @@ function AuthForm (){
                 });
                 alert(JSON.stringify(loginData, null, 2))
                 console.log("Login Data:", loginData);
-                console.log("User:", user);
+                
                 if (loginData.error) {
                     alert(loginData.error);
                     return;
                 }
                 // console.log("Login Response:", loginData);
-                const user = loginData.user; 
+                const user = loginData.user;
+                console.log("User:", user);
                 
 
                 
