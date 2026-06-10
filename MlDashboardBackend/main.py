@@ -13,7 +13,7 @@ from database.db import Base, engine, SessionLocal, ensure_database_schema
 from database.dataset_model import Dataset
 from database.user_model import User
 
-from database.auth import router as auth_router
+from auth import router as auth_router
 
 from models.preprocessing import preprocessData
 from models.model import trainModel
