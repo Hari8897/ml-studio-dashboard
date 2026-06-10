@@ -27,20 +27,21 @@ function AuthForm (){
                     email: formData.email,
                     password: formData.password
                 });
-                alert(JSON.stringify(loginData))
+                alert(JSON.stringify(loginData, null, 2))
+                console.log("Login Data:", loginData);
+                console.log("User:", user);
                 if (loginData.error) {
                     alert(loginData.error);
                     return;
                 }
-                console.log("Login Response:", loginData);
+                // console.log("Login Response:", loginData);
                 const user = loginData.user; 
                 
 
-                console.log("Login Data:", loginData);
-                console.log("User:", user);
+                
 
                 if (!user || !user.id) {
-                    console.error("Login response: ", loginData);b
+                    console.error("Login response: ", loginData);
                     alert("Login response is missing user details.");
                     return;
                 }
