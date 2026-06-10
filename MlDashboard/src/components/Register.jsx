@@ -28,7 +28,7 @@ function AuthForm (){
                     password: formData.password
                 });
                 alert(JSON.stringify(loginData, null, 2))
-                console.log("Login Data:", loginData);
+                //console.log("Login Data:", loginData);
                 
                 if (loginData.error) {
                     alert(loginData.error);
@@ -36,7 +36,7 @@ function AuthForm (){
                 }
                 // console.log("Login Response:", loginData);
                 const user = loginData.user;
-                console.log("User:", user);
+                //console.log("User:", user);
                 
 
                 
