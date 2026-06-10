@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+console.log("API_BASE_URL =", API_BASE_URL)
 
 const getStoredUser = () => {
     const storedUser = localStorage.getItem("user");
@@ -27,7 +28,7 @@ export const registerUser = async (userData) => {
         console.error("Full Error:", error);
         console.error("Response:", error.response);
         console.error("Data:", error.response?.data);
-        console.error("Status:", error.response?.status);
+        console.error("Status:", error.response?.status); 
         throw error;
     }
 };
