@@ -14,6 +14,10 @@ function MainContent({
     onUpload,
     columns,
     data,
+    userDatasets,
+    //setUserDatasets,
+    selectedDatasetId,
+    setSelectedDatasetId, 
     features,
     targetData,
     results,
@@ -30,6 +34,13 @@ function MainContent({
 
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedColumn, setSelectedColumn] = useState("");
+
+
+    //const handleDatasetChange = async (e) => {
+    //    const datasetId = e.target.value;
+    //    console.log("Selected Dataset ID:", datasetId)
+    //}
+
 
     /* 🔍 Filtering Logic */
     const filteredData = useMemo(() => {
@@ -69,7 +80,30 @@ function MainContent({
                 <div>                    
                     <section className="section-group">
                         <h3>📂 Upload / View Data</h3>
-                        <UploadSection onUpload={onUpload} />
+                        <section className="section-upload">
+                            <div className="upload-section">
+                                <UploadSection onUpload={onUpload} />
+                            </div>
+                            <div className="selection-section">
+                                <label>Select Datasets: </label>
+                                <select
+                                    value={selectedDatasetId}
+                                    onChange={(e) => setSelectedDatasetId(e.target.value)}
+                                >
+                                    <option value="">Select Dataset</option>
+                                    {userDatasets.map(dataset => (
+                                        <option
+                                            key={dataset.datasetid}
+                                            value={dataset.datasetid}
+                                        >
+                                            {dataset.datasetname}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </section>
+                        
+                        
                     </section>
                     {/* 🗃️ Original Data Table */}
                     {data && data.length > 0 && (

@@ -90,6 +90,25 @@ export const uploadFile = async (file) => {
         }  
 }; 
 
+// user specific datasets
+// getting userId and metadata
+export const getUserDatasets = async (userId) =>{
+    const response = await  axios.get(`${API_BASE_URL}/datasets/${userId}`);
+    return response.data;
+}
+
+// getting dataset with datasetid
+export const getDatasetPreview = async (datasetid) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/datasets-preview/${datasetid}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching dataset preview:", error);
+        throw error;
+    };
+};
+    
+
 
  // select target column
 export const fetchSelectTargetData = async (data, target) => {

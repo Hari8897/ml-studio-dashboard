@@ -1,5 +1,6 @@
 ﻿from doctest import DebugRunner, debug
-from fastapi import FastAPI, Form, HTTPException, UploadFile, File
+from email.policy import HTTP
+from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
 from pydantic import BaseModel
@@ -8,7 +9,9 @@ import numpy as np
 import json
 import io, os
 
-from database.db import Base, engine, SessionLocal, ensure_database_schema
+from sqlalchemy.orm import Session
+
+from database.db import Base, engine, SessionLocal, ensure_database_schema,get_db
 
 from database.dataset_model import Dataset
 from database.user_model import User
@@ -80,8 +83,9 @@ app.include_router(auth_router, prefix="/auth")
 
 @app.post("/upload")
 async def upload(user_id: int = Form(...), file: UploadFile = File(...)):     
-    print("Received file:", file.filename)
-    print("Content type:", file.content_type)
+    # print("Received file:", file.filename)
+    # print("Content type:", file.content_type)
+    
     try:
         contents = await file.read()  # async read  
         filename = file.filename.lower()
@@ -110,8 +114,9 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         file_path = f"uploads/{file.filename}"
         UPLOAD_FOLDER = "uploads"
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ✅ create if not exists
-
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+        filesize_bytes = os.path.getsize(file_path)
+        filesize_mb = round(filesize_bytes/(1024*1024),2)
 
         with open(file_path, "wb") as f:
             f.write(contents)
@@ -128,7 +133,8 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
                 datasetname=file.filename,
                 file_path=file_path,
                 rows=rows,
-                columns=columns
+                columns=columns,
+                filesize_mb  = filesize_mb 
             )
 
             db.add(new_dataset)
@@ -145,18 +151,66 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         return {
             "columns": df.columns.tolist(),
             "preview": df.head(10).to_dict(orient='records'),  # limit preview
-            "dataset_id": new_dataset.datasetid   
+            "dataset_id": new_dataset.datasetid,
+            "filesize_mb": new_dataset.filesize_mb  
         }
     except Exception as e:
         print("UPLOAD ERROR:", str(e))
         return {"error": str(e)}
 
     
+@app.get("/datasets/{user_id}")
+async def get_user_dataset(user_id: int, db: Session = Depends(get_db)):
+    datasets = (db.query(Dataset)
+        .filter(Dataset.user_id== user_id)
+        .all()
+        )
+    return datasets 
+
+@app.get("/datasets-preview/{datasetid}")
+async def get_dataset_preview(
+    datasetid: int,
+    db: Session = Depends(get_db)
+    ):
+    dataset = (db.query(Dataset)
+               .filter(Dataset.datasetid==datasetid)
+               .first()
+               )
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    file_path = dataset.file_path
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
+    try: 
+        if file_path.endswith(".csv"):
+            df = pd.read_csv(file_path)
+        elif file_path.endswith((".xlsx",".xls")):
+            df = pd.read_excel(file_path)
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported file format")
+
+        return {
+            "datasetid": dataset.datasetid,
+            "datasetname": dataset.datasetname,
+            "columns": df.columns.tolist(),
+            "preview": df.head(20).to_dict(orient="records"),
+            "shape": {
+                "rows":len(df),
+                "columns":len(df.columns)
+                }
+            }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+                         
+
 
 
 
 @app.post("/selectTarget")
-def get_target(request: DataRequest):
+async def get_target(request: DataRequest):
     try:
         # Get stored dataframe
         df = dataStore.get('df')

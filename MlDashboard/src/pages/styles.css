@@ -5,8 +5,8 @@
     font-family: "Poppins", sans-serif;
 }
 
-body{
-    background: #c2cff0;
+body {
+    background: #e3e5ea;
 }
 
 /* ===== Dashboard Layout ===== */
@@ -226,9 +226,8 @@ body{
 /* ===== Upload Section ===== */
 .upload-section{
     background: white;
-    padding: 30px;
+    padding: 15px 10px;
     border-radius: 18px;
-
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 
@@ -240,7 +239,7 @@ body{
 
 .upload-section p{
     color: #64748b;
-    font-size: 17px;
+    font-size: 18px;
     margin-bottom: 25px;
 }   
 

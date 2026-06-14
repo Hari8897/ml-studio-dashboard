@@ -1,6 +1,6 @@
 import './styles/AuthForm.css'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { registerUser, loginUser } from "../services/api";
 
@@ -75,11 +75,16 @@ function AuthForm (){
             catch (error) {
                 console.error("Registration Error:", error);
                 alert("Registration failed. Please try again.");
-                // Handle registration error
-  
+                // Handle registration error 
             }
+            useEffect(() => {
+                fetch(`${API_URL}/datasets/${user.user_id}`)
+                    .then
+            }) 
         }
-    };
+    }; 
+
+
 
 
 

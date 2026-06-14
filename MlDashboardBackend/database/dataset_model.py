@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey,Numeric, func
 from database.db import Base
- 
+   
 class Dataset(Base):
     __tablename__ = "datasets"
     
@@ -11,5 +11,6 @@ class Dataset(Base):
     file_path = Column(String(500))
     rows = Column(Integer)
     columns = Column(Integer)
+    filesize_mb = Numeric(10,2) 
     upload_time = Column(DateTime, server_default=func.now()) 
       

@@ -25,20 +25,16 @@ function UploadSection({ onUpload }) {
     };
 
     return (
-        <div className="upload-section">
-
+        <div>
             <label><b>Upload File</b></label>
-
             <input
                 type="file"
                 onChange={handleFileUpload}
                 className="file-input"
             />
-
             {fileName && (
                 <p className="file-name">📁 {fileName}</p>
             )}
-
         </div>
     );
 }

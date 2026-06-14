@@ -14,7 +14,7 @@ load_dotenv(env_path)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-#print(f"DATABASE_URL: {repr(DATABASE_URL)}")  # Debugging line to check the value of DATABASE_URL after loading .env file
+#  print(f"DATABASE_URL: {repr(DATABASE_URL)}")  # Debugging line to check the value of DATABASE_URL after loading .env file
 
 
 # print("DATABASE_URL after loading: ", DATABASE_URL)  # Debugging line to check if DATABASE_URL is loaded correctly after loading .env file 

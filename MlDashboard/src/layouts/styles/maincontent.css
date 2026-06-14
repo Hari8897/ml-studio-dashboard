@@ -1,6 +1,5 @@
 
 .section-group {
-    background: white;
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 25px;
@@ -31,7 +30,7 @@
     font-size: 14px;
     color: #0f172a;
     min-width: 80px;
-    padding: auto;
+    padding: 10px;
 }
 
 .search-filter-box input {
@@ -57,13 +56,31 @@
     margin-bottom: 15px;
 }
 
+.uploadfiles{
+    display:flex;
+    flex-direction:column;
+}
+/*Upload files*/
+.section-upload {
+    display:flex;
+    gap:10px;
+    font-size:14px;
+   
+}
 
+.selection-section {
+    width: 30%;
+    background: white;
+    padding: 15px 10px;
+    color: #0f172a;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
 /* preprocessing section */
-
-.preprocess-header h3 {   
+.preprocess-header h3 {
     font-size: 24px;
     color: #0f172a;
-    margin-bottom: 15px;    
+    margin-bottom: 15px;
 }
 
 .preprocess-button {
