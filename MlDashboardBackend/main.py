@@ -115,11 +115,14 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         UPLOAD_FOLDER = "uploads"
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ✅ create if not exists
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-        filesize_bytes = os.path.getsize(file_path)
-        filesize_mb = round(filesize_bytes/(1024*1024),2)
+
+
 
         with open(file_path, "wb") as f:
             f.write(contents)
+        filesize_bytes = os.path.getsize(file_path)
+        filesize_mb = round(filesize_bytes/(1024*1024),2)
+
 
         db = SessionLocal()
         try:
