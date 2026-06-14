@@ -1,4 +1,5 @@
-﻿from doctest import DebugRunner, debug
+﻿from ast import Not
+from doctest import DebugRunner, debug
 from email.policy import HTTP
 from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -148,7 +149,6 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         df = df.replace([float("inf"), float("-inf")], None)
         df = df.where(pd.notnull(df), None)
 
-
         dataStore['df'] = df
 
         return {
@@ -193,6 +193,11 @@ async def get_dataset_preview(
         else:
             raise HTTPException(status_code=400, detail="Unsupported file format")
 
+        if df is not None and not df.empty:
+            dataStore['df'] = df
+        else:
+            return {"error": "Dataset is empty"}
+
         return {
             "datasetid": dataset.datasetid,
             "datasetname": dataset.datasetname,
@@ -204,12 +209,7 @@ async def get_dataset_preview(
                 }
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-                         
-
-
+        raise HTTPException(status_code=500, detail=str(e));
 
 
 @app.post("/selectTarget")
@@ -230,7 +230,7 @@ async def get_target(request: DataRequest):
         # Split data
         X = df.drop(columns=[target])
         y = df[[target]]
-
+        print("features", X)
         return {
             "features": X.to_dict(orient="records"),
             "target": y.to_dict(orient="records"),
@@ -241,20 +241,21 @@ async def get_target(request: DataRequest):
     except Exception as e:
         return {"error": str(e)}
 
+
 @app.post("/preprocess")
 async def preprocess(data: PreprocessRequest):
-	try:
-		df= pd.DataFrame(data.features)
-		target= data.target
-		options = data.options
-
-		df=preprocessData(df, options)
-		return {
+    print("preprocess", data)
+    try:
+        df= pd.DataFrame(data.features)
+        target= data.target
+        options = data.options
+        df=preprocessData(df, options)
+        return {
 			"features":df.to_dict(orient="records"),
 			"target": target
 		}
-	except Exception as e:
-		return {"error":str(e)}
+    except Exception as e:
+        return {"error":str(e)}
 
 @app.post("/correlation")
 async def correlation(file: UploadFile=File(...)):
@@ -267,7 +268,6 @@ async def correlation(file: UploadFile=File(...)):
         "matrix": corr.values.tolist(),
         "columns":list(corr.columns)
         }
-
 
 
 @app.post("/train")

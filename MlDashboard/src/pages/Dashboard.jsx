@@ -61,7 +61,7 @@ function Dashboard() {
                 setLoadingDatasets(true);
 
                 const data = await (getUserDatasets(user.id));
-                console.log("Datasets:", data)
+                //console.log("Datasets:", data)
 
                 const uniqueDatasets = [
                     ...new Map(
@@ -85,7 +85,7 @@ function Dashboard() {
         const fetchDatasetPreview = async () => {
             try {
                 const data = await getDatasetPreview(selectedDatasetId);
-                console.log("Dataset Preview:", data);
+                //console.log("Dataset Preview:", data);
                 setColumns(data.columns);
                 setTableData(data.preview);
             } catch (error) {
@@ -116,8 +116,9 @@ function Dashboard() {
     };
 
 
+
     //const data = await getDatasetPreview(1);
-    //console.log(data);
+ 
     const handlePreprocess = async () => {
         const result = await fetchProcessedData(features, targetData, options)
 
@@ -158,23 +159,23 @@ function Dashboard() {
 
     const featureColumns = columns.filter(col => col !== target);
     const handleModelTraining = async () => {
-        console.log("train button clicked.")
+        //console.log("train button clicked.")
 
         const filteredColumns = featureColumns.filter(
             col => !dropColumns.includes(col)
         );
 
-        console.log("Filtered Columns:", filteredColumns);
+        //console.log("Filtered Columns:", filteredColumns);
        
         //convert data
         const formattedFeatures = formatFeatures(features, filteredColumns);
         const formattedTarget = formatTarget(targetData, target);
 
-        console.log("Sending Data:", {
-            features: formattedFeatures.slice(0,2),
-            target: formattedTarget.slice(0, 2),
-            featureNames: filteredColumns,
-        });
+        ////console.log("Sending Data:", {
+        //    features: formattedFeatures.slice(0,2),
+        //    target: formattedTarget.slice(0, 2),
+        //    featureNames: filteredColumns,
+        //});
       
         console.log("target:", target);
         console.log("sample targetData row:", targetData[0]);

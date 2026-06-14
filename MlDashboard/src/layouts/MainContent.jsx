@@ -231,8 +231,8 @@ function MainContent({
                         </button>   
                     </div>
                     <div className="preprocess-info">
-                        <p><b>Features:</b> {features.length} rows</p>
-                        <p><b>Target:</b> {targetData.length} rows</p>
+                        <p><b>Features:</b>{features?.length || 0} rows</p>
+                        <p><b>Target:</b> {targetData?.length || 0} rows</p>
                         <p><b>Missing Num Strategy:</b> {options.missing_num}</p>
                         <p><b>Missing Cat Strategy:</b> {options.missing_cat}</p>
                         <p><b>Encoding:</b> {options.encoding}</p>
