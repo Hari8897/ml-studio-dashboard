@@ -112,16 +112,14 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
 
         rows = df.shape[0]
         columns = df.shape[1]
-        file_path = f"uploads/{file.filename}"
-        UPLOAD_FOLDER = "uploads"
-        os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ✅ create if not exists
-        file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+        # file_path = f"uploads/{file.filename}"
+        # UPLOAD_FOLDER = "uploads"
+        # os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ✅ create if not exists
+        # file_path = os.path.join(UPLOAD_FOLDER, file.filename)
 
-
-
-        with open(file_path, "wb") as f:
-            f.write(contents)
-        filesize_bytes = os.path.getsize(file_path)
+        # with open(file_path, "wb") as f:
+        #     f.write(contents)
+        filesize_bytes = len(contents)
         filesize_mb = round(filesize_bytes/(1024*1024),2)
 
 
@@ -135,7 +133,8 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
                 user_id=user.id,
                 username=user.username,
                 datasetname=file.filename,
-                file_path=file_path,
+                file_data=contents,
+
                 rows=rows,
                 columns=columns,
                 filesize_mb  = filesize_mb 
