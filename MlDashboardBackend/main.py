@@ -1,6 +1,7 @@
 ﻿from ast import Not
 from doctest import DebugRunner, debug
 from email.policy import HTTP
+from tkinter.tix import STATUS
 from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
@@ -91,8 +92,7 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         contents = await file.read()  # async read  
         filename = file.filename.lower()
 
-        # Detect file type
-        
+        # Read the dataset for validation        
         if filename.endswith(".csv"):
             try:
                 decoded = contents.decode("utf-8-sig")
@@ -112,50 +112,61 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
 
         rows = df.shape[0]
         columns = df.shape[1]
+
         # file_path = f"uploads/{file.filename}"
         # UPLOAD_FOLDER = "uploads"
         # os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ✅ create if not exists
         # file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-
         # with open(file_path, "wb") as f:
         #     f.write(contents)
+        # filesize_bytes = os.path.getsize(file_path)
         filesize_bytes = len(contents)
         filesize_mb = round(filesize_bytes/(1024*1024),2)
 
-
         db = SessionLocal()
         try:
-            user = db.query(User).filter(User.id == user_id).first()
+            user =(db.query(User)
+                   .filter(User.id == user_id)
+                   .first())
             if not user:
-                return {"error": "Invalid user. Please log in again."}
+                return {
+                    "error": "Invalid user. Please log in again."
+                    }
 
             new_dataset = Dataset(
                 user_id=user.id,
                 username=user.username,
                 datasetname=file.filename,
-                file_data=contents,
+                # file_path=file_path,
+
+                # Stored in POSTGRESQL
+                file_data = contents,
 
                 rows=rows,
                 columns=columns,
                 filesize_mb  = filesize_mb 
-            )
+              
+                )
 
             db.add(new_dataset)
             db.commit()
             db.refresh(new_dataset)
+
         finally:
             db.close()
+
         df = df.replace([float("inf"), float("-inf")], None)
         df = df.where(pd.notnull(df), None)
 
         dataStore['df'] = df
 
         return {
+            "dataset_id": new_dataset.datasetid,
             "columns": df.columns.tolist(),
             "preview": df.head(10).to_dict(orient='records'),  # limit preview
-            "dataset_id": new_dataset.datasetid,
             "filesize_mb": new_dataset.filesize_mb  
         }
+
     except Exception as e:
         print("UPLOAD ERROR:", str(e))
         return {"error": str(e)}
@@ -179,18 +190,50 @@ async def get_dataset_preview(
                .first()
                )
     if not dataset:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-    file_path = dataset.file_path
+        raise HTTPException(
+            status_code=404,
+            detail="Dataset not found"
+            )
+    # file_path = dataset.file_path
 
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
+    # if not os.path.exists(file_path):
+    #     raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
     try: 
-        if file_path.endswith(".csv"):
-            df = pd.read_csv(file_path)
-        elif file_path.endswith((".xlsx",".xls")):
-            df = pd.read_excel(file_path)
+        # if file_path.endswith(".csv"):
+        #     df = pd.read_csv(file_path)
+        # elif file_path.endswith((".xlsx",".xls")):
+        #     df = pd.read_excel(file_path)
+  
+        contents = dataset.file_data
+
+        if contents is None:
+            raise HTTPException(
+                status_code=404, 
+                detail="Dataset file data not found"
+                )
+
+        #CSV
+        if dataset.datasetname.lower().endswith(".csv"):
+            try:
+                decoded = contents.decode("utf-8-sig")
+            except:
+                decoded = contents.decode("latin-1")
+
+            s = io.StringIO(decoded)  
+            df = pd.read_csv(
+                s,
+                sep=None,
+                engine='python',
+                on_bad_lines='skip'
+                )
+        # EXCEL
+        elif dataset.datasetname.lower().endswith(".xlsx",".xls"):
+            s = io.StringIO(contents)
+            df = pd.read_excel(s)
+
         else:
-            raise HTTPException(status_code=400, detail="Unsupported file format")
+             raise HTTPException(status_code=400, detail="Unsupported file format")
+
 
         if df is not None and not df.empty:
             dataStore['df'] = df
