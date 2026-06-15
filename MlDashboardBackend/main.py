@@ -100,7 +100,7 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
                 decoded = contents.decode("latin-1")
 
             s = io.StringIO(decoded)  
-            df = pd.read_csv(s, sep=None, engine='python', on_bad_lines='skip')
+            df = pd.read_csv(s, sep=None, engine='python', on_bad_lines='skip', low_memory=False)
       
         elif filename.endswith(".xlsx"):
             df = pd.read_excel(io.BytesIO(contents))
@@ -224,11 +224,12 @@ async def get_dataset_preview(
                 s,
                 sep=None,
                 engine='python',
-                on_bad_lines='skip'
+                on_bad_lines='skip',
+                low_memory=False
                 )
         # EXCEL
-        elif dataset.datasetname.lower().endswith(".xlsx",".xls"):
-            s = io.StringIO(contents)
+        elif dataset.datasetname.lower().endswith((".xlsx",".xls")):
+            s = io.BytesIO(contents)
             df = pd.read_excel(s)
 
         else:
