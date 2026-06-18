@@ -38,25 +38,29 @@ function AuthForm (){
                 const user = loginData.user;
                 //console.log("User:", user);
                 
-
-                
-
                 if (!user || !user.id) {
                     console.error("Login response: ", loginData);
                     alert("Login response is missing user details.");
                     return;
                 }
                 // 
-                localStorage.setItem("user", 
-                    JSON.stringify(user)); 
+                localStorage.setItem(
+                    "user", 
+                    JSON.stringify(user)
+                ); 
                 alert("Login successful!");
                 alert("Reached here successfully");
 
-                console.log(localStorage.getItem("user"))
-                navigate("/dashboard")
+                console.log(
+                    "Stored User:",
+                    JSON.parse(localStorage.getItem("user"))
+                );
+                alert("Login successful!");
+                navigate("/dashboard");
                 // Handle successful login (e.g., store token, redirect)
             } catch (error) {
-                console.error("Login Error:", error);   
+                console.error("Login Error:", error); 
+                alert("Login Failed!")
                 // Handle login error
             }
         } else {
@@ -67,8 +71,7 @@ function AuthForm (){
                     if (registrationData.error) {
                         alert(registrationData.error);
                         return;
-                    }
-                    console.log("Registration successful:", registrationData);
+                }
                 alert("Registration successful! Please login.");
                 setIsLogin(true); // Switch to login after successful registration
             }
@@ -76,11 +79,7 @@ function AuthForm (){
                 console.error("Registration Error:", error);
                 alert("Registration failed. Please try again.");
                 // Handle registration error 
-            }
-            useEffect(() => {
-                fetch(`${API_URL}/datasets/${user.user_id}`)
-                    .then
-            }) 
+            }         
         }
     }; 
 

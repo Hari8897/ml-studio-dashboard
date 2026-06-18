@@ -50,7 +50,6 @@ app.add_middleware(
 
 class DatasetRequest(BaseModel):
     datasetname: str
-    file_path:str
     rows:int
     column: int
 
@@ -100,9 +99,9 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
                 decoded = contents.decode("latin-1")
 
             s = io.StringIO(decoded)  
-            df = pd.read_csv(s, sep=None, engine='python', on_bad_lines='skip', low_memory=False)
+            df = pd.read_csv(s, sep=None, engine='python', on_bad_lines='skip')
       
-        elif filename.endswith(".xlsx"):
+        elif filename.endswith(".xlsx",".xls"):
             df = pd.read_excel(io.BytesIO(contents))
         else:
             raise HTTPException(status_code=400, detail="Only CSV and XLSX files are supported")
@@ -212,6 +211,15 @@ async def get_dataset_preview(
                 detail="Dataset file data not found"
                 )
 
+        print("Dataset ID:", datasetid)
+        print("Dataset Name:", dataset.datasetname)
+        print("File Data Exists:", dataset.file_data is not None)
+
+        contents = dataset.file_data
+
+        print("Contents Type:", type(contents))
+        print("Contents Length:", len(contents) if contents else 0)
+
         #CSV
         if dataset.datasetname.lower().endswith(".csv"):
             try:
@@ -224,8 +232,7 @@ async def get_dataset_preview(
                 s,
                 sep=None,
                 engine='python',
-                on_bad_lines='skip',
-                low_memory=False
+                on_bad_lines='skip'
                 )
         # EXCEL
         elif dataset.datasetname.lower().endswith((".xlsx",".xls")):
@@ -251,7 +258,10 @@ async def get_dataset_preview(
                 "columns":len(df.columns)
                 }
             }
+    except HTTPException:
+        raise
     except Exception as e:
+        print("PREVIEW ERROR:", str(e))
         raise HTTPException(status_code=500, detail=str(e));
 
 
