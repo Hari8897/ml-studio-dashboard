@@ -229,7 +229,7 @@ async def get_dataset_preview(
                 )
         # EXCEL
         elif dataset.datasetname.lower().endswith((".xlsx",".xls")):
-            s = io.BytesIO(contents)
+            s = io.BytesIO (contents)
             df = pd.read_excel(s)
 
         else:
@@ -283,6 +283,7 @@ async def get_target(request: DataRequest):
 
     except Exception as e:
         return {"error": str(e)}
+
 
 
 @app.post("/preprocess")
