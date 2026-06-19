@@ -1,7 +1,6 @@
 ﻿from ast import Not
 from doctest import DebugRunner, debug
 from email.policy import HTTP
-from tkinter.tix import STATUS
 from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
