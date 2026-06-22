@@ -1,37 +1,41 @@
-.upload-section{
-    background: white;
-    padding: 10px;
-    border-radius: 18px;
-
-    box-shadow: 0 2px 12px rgba(23, 23, 23, 0.5);
+.upload-control {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.upload-section h2{
-    font-size: 28px;
-    color: #0f172a;
-    margin-bottom: 20px;
+.upload-control label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 800;
 }
-.upload-section p{
-    color: #64748b;
-    font-size: 17px;
-    margin-bottom: 25px;
-}
-/* Upload Button */
-.upload-btn{
-    background: #2563eb;
-    color: white;
-    border: none;
 
-    padding: 12px 20px;
+.file-input {
+    width: 100%;
+    min-height: 46px;
+    border: 1px dashed #9db2ce;
     border-radius: 8px;
-
+    background: #f8fafc;
+    color: #334155;
+    padding: 10px;
     cursor: pointer;
-    transition: 0.3s;
-}
-.upload-btn:hover{
-    background: #1d4ed8;
 }
 
-label {
-    width: 300px;
+.file-input::file-selector-button {
+    min-height: 32px;
+    margin-right: 12px;
+    border: 0;
+    border-radius: 7px;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 6px 12px;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.file-name {
+    margin: 0;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 650;
 }

@@ -1,11 +1,11 @@
 ﻿
 import React from "react";
-import UploadSection from "../components/UploadFile";
+import { FaChartLine, FaDatabase, FaHome, FaProjectDiagram, FaSlidersH } from "react-icons/fa";
 import "./styles/sidebar.css";
 
 const Sidebar=({
     setActiveStep,
-    // activeStep,
+    activeStep,
     // onUpload,
     // columns,
     // setTarget, options,
@@ -28,21 +28,44 @@ const Sidebar=({
 
     // ];
 
+    const steps = [
+        { key: "home", label: "Overview", icon: <FaHome /> },
+        { key: "upload", label: "Data Library", icon: <FaDatabase /> },
+        { key: "preprocess", label: "Preprocess", icon: <FaSlidersH /> },
+        { key: "visualize", label: "Visualize", icon: <FaProjectDiagram /> },
+        { key: "result", label: "Model Results", icon: <FaChartLine /> },
+    ];
+
     return (
         <div className="sidebar">
-             <h2 className="logo"> Controls</h2>  
+             <div className="sidebar-header">
+                <span className="sidebar-mark">ML</span>
+                <div>
+                    <h2>Studio</h2>
+                    <p>Workflow controls</p>
+                </div>
+             </div>
 
-            {/*  Navigation */}  
             <ul className="menu">
-                <li onClick={()=> setActiveStep("home")}>🏠Home</li>
-                <li onClick={()=> setActiveStep("upload")}>📂Upload / View Data</li>
-                <li onClick={()=> setActiveStep("preprocess")}>🧹Preprocess Data</li>
-                <li onClick={()=> setActiveStep("visualize")}>📊 Visualize</li>
-                <li onClick={()=> setActiveStep("result")}>📈Results</li>
-                {/* <li onClick={()=> setActiveStep("heatmap")}>Correlation Heatmap</li> */}
+                {steps.map((step) => (
+                    <li
+                        key={step.key}
+                        className={activeStep === step.key ? "active" : ""}
+                        onClick={() => setActiveStep(step.key)}
+                    >
+                        <span className="menu-icon">{step.icon}</span>
+                        <span>{step.label}</span>
+                    </li>
+                ))}
             </ul>
 
-            <hr className="divider" /> 
+            <div className="sidebar-status">
+                <span className="status-dot" />
+                <div>
+                    <strong>Ready</strong>
+                    <p>Upload data to begin training.</p>
+                </div>
+            </div>
 
             {/*Step based controls */} 
 

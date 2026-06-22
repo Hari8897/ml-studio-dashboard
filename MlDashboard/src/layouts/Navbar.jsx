@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { FaRegUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaBell, FaBolt, FaRegUserCircle, FaSignOutAlt } from "react-icons/fa";
 import "./styles/Navbar.css";
 
 const getStoredUser = () => {
@@ -20,6 +20,7 @@ const getStoredUser = () => {
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [user, setUser] = useState(getStoredUser);
 
     useEffect(() => {
@@ -45,21 +46,49 @@ const Navbar = () => {
         || user?.email?.charAt(0)?.toUpperCase()
         || "";
 
+    const moduleTitle = {
+        "/dashboard": "Overview",
+        "/upload": "Data Library",
+        "/preprocess": "Preprocessing",
+        "/visualize": "Visualization",
+        "/model": "Model Results",
+        "/auth": "Account",
+        "/forgot-password": "Account Recovery",
+        "/reset-password": "Password Reset",
+    }[location.pathname] || "Workspace";
+
     return (
         <nav className="navbar">
             <div className="logo">
-                <h2>ML Studio</h2>
+                <button type="button" className="brand-button" onClick={() => navigate("/dashboard")}>
+                    <span className="brand-mark">ML</span>
+                    <span className="brand-copy">
+                        <strong>ML Studio</strong>
+                        <small>Dashboard</small>
+                    </span>
+                </button>
             </div>
 
-            <ul className="nav-links">
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/upload">Upload</Link></li>
-                <li><Link to="/preprocess">Preprocess</Link></li>
-                <li><Link to="/visualize">Visualize</Link></li>
-                <li><Link to="/model">Model</Link></li>
-            </ul>
+            <div className="nav-center">
+                <div className="workspace-chip">
+                    <FaBolt />
+                    <span>{moduleTitle}</span>
+                </div>
+                <div className="system-status">
+                    <span className="status-dot" />
+                    <span>Online</span>
+                </div>
+            </div>
 
             <div className="nav-actions">
+                <button
+                    className="icon-action"
+                    type="button"
+                    aria-label="Notifications"
+                    title="Notifications"
+                >
+                    <FaBell />
+                </button>
                 {user ? (
                     <div className="profile-menu">
                         <div className="profile-avatar">{profileInitial}</div>

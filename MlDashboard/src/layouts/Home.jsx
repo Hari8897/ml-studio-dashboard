@@ -1,49 +1,83 @@
-﻿import React from "react"
-import "./styles/home.css"
+import React from "react";
+import { FaChartBar, FaDatabase, FaPlay, FaSlidersH } from "react-icons/fa";
+import "./styles/home.css";
 
 const Home = ({ setActiveStep }) => {
+    const actions = [
+        {
+            title: "Upload Data",
+            text: "Import CSV or Excel files and preview rows before modeling.",
+            icon: <FaDatabase />,
+            step: "upload",
+        },
+        {
+            title: "Preprocess",
+            text: "Choose target columns, handle missing values, encode, and scale.",
+            icon: <FaSlidersH />,
+            step: "preprocess",
+        },
+        {
+            title: "Visualize",
+            text: "Inspect correlations and patterns before training.",
+            icon: <FaChartBar />,
+            step: "visualize",
+        },
+        {
+            title: "Train Model",
+            text: "Run model training and review predictions and feature importance.",
+            icon: <FaPlay />,
+            step: "result",
+        },
+    ];
+
     return (
-        <div className="home-header" style={{ padding: "20px" }}>
-            <h2>🚀 Ml Data Analysis Dashboard</h2>
-            <p style={{ color: "#555", marginBottom: "20px" }}>
-             Upload your datset, preprocess it, visualize insights, and train model
-            </p>
+        <div className="dashboard-home">
+            <section className="page-heading">
+                <div>
+                    <span className="eyebrow">Machine learning workspace</span>
+                    <h1>Build, inspect, and train models from one clean workflow.</h1>
+                    <p>Move from dataset upload to preprocessing, visualization, and model results without leaving the dashboard.</p>
+                </div>
+                <button className="primary-action" type="button" onClick={() => setActiveStep("upload")}>
+                    <FaDatabase />
+                    Upload Dataset
+                </button>
+            </section>
 
-            {/*Quick action cards*/}
-            <div  className="freature-card"
-            style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "20px"
-            }} >
-                <div className="feature-card" onClick={() => setActiveStep("upload")}>
-                    <h3>📂 Upload Data</h3>
-                    <p>Start by uploading your dataset (CSV)</p>
+            <section className="metric-grid">
+                <div className="metric-card">
+                    <span>Workflow</span>
+                    <strong>5 Steps</strong>
+                    <p>Upload to results</p>
                 </div>
-                <div className="feature-card" onClick={() => setActiveStep("preprocess")}>
-                    <h3>🧹 Preprocess</h3>
-                    <p>Handle missing values, encoding, scaling</p>
+                <div className="metric-card">
+                    <span>Supported Files</span>
+                    <strong>CSV, XLSX</strong>
+                    <p>Preview before training</p>
                 </div>
-                <div className="feature-card" onClick={() => setActiveStep("visualize")}>
-                    <h3>📊 Visualize</h3>
-                    <p>Explore correlations and patterns</p>
+                <div className="metric-card">
+                    <span>Processing</span>
+                    <strong>Ready</strong>
+                    <p>Missing values, encoding, scaling</p>
                 </div>
-                <div className="feature-card" onClick={() => setActiveStep("train")}>
-                    <h3>🤖 Train Model</h3>
-                    <p>Build ML models automatically</p>
-                </div>
-                <div className="feature-card" onClick={() => setActiveStep("result")}>
-                    <h3>📈 Results</h3>
-                    <p>View model performance and insights</p>
-                </div>
+            </section>
 
-
-            </div>
-
+            <section className="action-grid">
+                {actions.map((action) => (
+                    <button
+                        key={action.title}
+                        className="action-card"
+                        type="button"
+                        onClick={() => setActiveStep(action.step)}
+                    >
+                        <span className="action-icon">{action.icon}</span>
+                        <span className="action-title">{action.title}</span>
+                        <span className="action-text">{action.text}</span>
+                    </button>
+                ))}
+            </section>
         </div>
-    )
-
-}
-
+    );
+};
 
 export default Home;
