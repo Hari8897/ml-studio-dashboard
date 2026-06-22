@@ -151,9 +151,22 @@ function Dashboard() {
     };
 
     const formatTarget = (targetData, targetColumn) => {
+        const labelMap = new Map();
+
         return targetData.map(row => {
-            const val = Number(row[targetColumn]);
-            return isNaN(val) ? 0 : val;
+            const rawValue = row[targetColumn];
+            const numericValue = Number(rawValue);
+
+            if (!Number.isNaN(numericValue) && rawValue !== "" && rawValue !== null) {
+                return numericValue;
+            }
+
+            const label = String(rawValue ?? "");
+            if (!labelMap.has(label)) {
+                labelMap.set(label, labelMap.size);
+            }
+
+            return labelMap.get(label);
         });
     };
 

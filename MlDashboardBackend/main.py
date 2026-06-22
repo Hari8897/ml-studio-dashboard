@@ -16,7 +16,7 @@ from database.db_models import Dataset, User
 
 from routes.auth import router as auth_router
 
-from models.preprocessing import preprocessData
+from models.preprocessing import preprocessData, preprocessTarget
 from models.model import trainModel
 
 from fastapi.staticfiles import StaticFiles
@@ -304,9 +304,10 @@ async def preprocess(data: PreprocessRequest):
         target= data.target
         options = data.options
         df=preprocessData(df, options)
+        processed_target = preprocessTarget(target, options)
         return {
 			"features":df.to_dict(orient="records"),
-			"target": target
+			"target": processed_target.to_dict(orient="records")
 		}
     except Exception as e:
         return {"error":str(e)}

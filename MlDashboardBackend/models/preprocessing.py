@@ -53,4 +53,36 @@ def preprocessData(df, options):
         df[num_cols]=scaler.fit_transform(df[num_cols])
 
     return df 
+
+
+def preprocessTarget(target, options):
+    target_df = pd.DataFrame(target)
+
+    if target_df.empty:
+        return target_df
+
+    missing_num = options.get("missing_num") or options.get("missing")
+    missing_cat = options.get("missing_cat")
+
+    if missing_num == "drop" or missing_cat == "drop":
+        target_df = target_df.dropna()
+    elif missing_num == "mean":
+        for col in target_df.select_dtypes(include='number').columns:
+            target_df[col] = target_df[col].fillna(target_df[col].mean())
+    elif missing_num == "median":
+        for col in target_df.select_dtypes(include='number').columns:
+            target_df[col] = target_df[col].fillna(target_df[col].median())
+    elif missing_num == "zero":
+        target_df = target_df.fillna(0)
+
+    if missing_cat == "mode":
+        for col in target_df.select_dtypes(include='object').columns:
+            mode = target_df[col].mode(dropna=True)
+            if not mode.empty:
+                target_df[col] = target_df[col].fillna(mode.iloc[0])
+
+    for col in target_df.select_dtypes(include=['object', 'category', 'bool']).columns:
+        target_df[col] = LabelEncoder().fit_transform(target_df[col].astype(str))
+
+    return target_df
    
