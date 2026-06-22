@@ -44,6 +44,12 @@ export const loginUser = async (credentials) => {
 };
 
 
+export const forgotPassword = async (email) => {
+    const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
+    return response.data;
+}
+
+
 // Common fetch handler
 const handleResponse = async (response) => {
     if (!response.ok){

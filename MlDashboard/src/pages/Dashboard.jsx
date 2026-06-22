@@ -5,7 +5,7 @@ import Sidebar from "../layouts/Sidebar";
 import MainContent from "../layouts/MainContent";
 import Navbar from "../layouts/Navbar";
 import "./styles.css";
-import AuthForm from "../components/Register";
+//import AuthForm from "../components/AuthPage";
 
 
 const ROUTE_STEPS = {
@@ -177,8 +177,8 @@ function Dashboard() {
         //    featureNames: filteredColumns,
         //});
       
-        console.log("target:", target);
-        console.log("sample targetData row:", targetData[0]);
+        //console.log("target:", target);
+        //console.log("sample targetData row:", targetData[0]);
 
         const response = await trainModel(
             formattedFeatures,
@@ -187,7 +187,7 @@ function Dashboard() {
         );
 
 
-        console.log("Train Response:", response);
+        //console.log("Train Response:", response);
 
         if (response) {
             setResults(response);

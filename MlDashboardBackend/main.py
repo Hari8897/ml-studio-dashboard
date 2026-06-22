@@ -1,10 +1,8 @@
-﻿from ast import Not
-from doctest import DebugRunner, debug
-from email.policy import HTTP
+﻿
 from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Tag
 import pandas as pd
 import numpy as np
 import json
@@ -14,10 +12,9 @@ from sqlalchemy.orm import Session
 
 from database.db import Base, engine, SessionLocal, ensure_database_schema,get_db
 
-from database.dataset_model import Dataset
-from database.user_model import User
+from database.db_models import Dataset, User
 
-from auth import router as auth_router
+from routes.auth import router as auth_router
 
 from models.preprocessing import preprocessData
 from models.model import trainModel
@@ -79,7 +76,11 @@ class TrainResponse(BaseModel):
 
 dataStore = {}
 
-app.include_router(auth_router, prefix="/auth")
+app.include_router(
+    auth_router,
+    prefix="/auth",
+    tags=["Authentication"]
+    )
 
 @app.post("/upload")
 async def upload(user_id: int = Form(...), file: UploadFile = File(...)):     

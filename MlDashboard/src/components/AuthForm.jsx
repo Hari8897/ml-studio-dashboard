@@ -1,12 +1,14 @@
 import './styles/AuthForm.css'
 
-import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate, Link } from 'react-router-dom';
 import { registerUser, loginUser } from "../services/api";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 function AuthForm (){
     const [isLogin, setIsLogin] = useState(true);
+    const [showPassword, setShowPassword] = useState(false)
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -48,8 +50,8 @@ function AuthForm (){
                     "user", 
                     JSON.stringify(user)
                 ); 
-                alert("Login successful!");
-                alert("Reached here successfully");
+                //alert("Login successful!");
+                //alert("Reached here successfully");
 
                 console.log(
                     "Stored User:",
@@ -93,7 +95,7 @@ function AuthForm (){
                 {/*Login Section */}
                 <div className="login-section">
                     <h2>{isLogin ? "Login" : "Register"}</h2>
-                    <p>Welcome back! Please login to your account.</p>
+                    <p>{isLogin ? "Welcome back! Please login to your account." : "Welcome!  Please Register your account.."}</p>
 
                     <form onSubmit={handleSubmit}>
                         {!isLogin && (
@@ -123,14 +125,30 @@ function AuthForm (){
 
                         <div className="input-group">
                             <label>Password</label>
-                            <input 
-                                type="password"
-                                name="password" 
-                                placeholder="Enter your password" 
-                                value={formData.password}
-                                onChange={handleChange}
-                            />  
+
+                            <div className="password-field">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <span
+                                    className="eye-icon"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                         </div>
+                        {isLogin && (
+                            <div className="forgot-password">
+                                <Link to="/forgot-password">Forgot Password?</Link>
+                            </div>
+                        ) }
 
                         <button type = "submit" className="login-btn">
                                 {isLogin ?  "Login" : "Register"}
@@ -155,6 +173,5 @@ function AuthForm (){
     
     ) 
 };
-
 
 export default AuthForm;
