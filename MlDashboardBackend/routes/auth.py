@@ -1,14 +1,16 @@
 from datetime import datetime, timedelta
-import secrets
+import os
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_mail import FastMail, MessageSchema, MessageType
 from sqlalchemy.orm import Session
 
+from config.mail import build_password_reset_template, conf
 from database.db import get_db
 from database.db_models import User, PasswordResetToken
 
-from utils.security import hash_password
+from utils.security import hash_password, verify_password
 from pydantic import BaseModel, EmailStr
 
 router = APIRouter()
@@ -37,7 +39,7 @@ def register(
                 "error": "Email already exists"
             }
 
-        hashed_password = pwd_context.hash(
+        hashed_password = hash_password(
             data["password"]
         )
 
@@ -72,7 +74,7 @@ def register(
 @router.post("/login")
 def login(data: dict, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == data["email"]).first()
-    if not user or not pwd_context.verify(data["password"], user.password):
+    if not user or not verify_password(data["password"], user.password):
         return {"error": "Invalid email or password"}
     return {
         "message": "Login successful",
@@ -93,7 +95,7 @@ class ResetPasswordRequest(BaseModel):
     new_password: str
 
 @router.post("/forgot-password")
-def forgot_password(
+async def forgot_password(
     request: ForgotPasswordRequest,
     db: Session = Depends(get_db)
 ):
@@ -119,9 +121,31 @@ def forgot_password(
     db.commit()
     db.refresh(reset_token)
 
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+    reset_link = f"{frontend_url}/reset-password/{token}"
+    email_body = build_password_reset_template(
+        username=user.username or "there",
+        reset_link=reset_link
+    )
+
+    message = MessageSchema(
+        subject="Reset your ML Studio password",
+        recipients=[user.email],
+        body=email_body,
+        subtype=MessageType.html
+    )
+
+    try:
+        await FastMail(conf).send_message(message)
+    except Exception as e:
+        print("PASSWORD RESET EMAIL ERROR:", repr(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Could not send reset email: {str(e)}"
+        )
+
     return {
-        "message": "Password reset token generated",
-        "token": token
+        "message": "Password reset link sent to your email"
     }
 
 

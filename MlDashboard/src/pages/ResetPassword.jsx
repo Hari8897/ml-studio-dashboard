@@ -1,33 +1,45 @@
 import { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { resetPassword } from "../services/api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import "../components/styles/AuthForm.css";
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const params = useParams();
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate()
-        ;    const token = searchParams.get("token");
+    const navigate = useNavigate();
+    const token = params.token || searchParams.get("token");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
 
-        if (password !== confirmPassword) {
-            alert("Passwords do not match");
+        if (!token) {
+            setError("Reset token is missing. Please request a new reset link.");
             return;
         }
 
+        if (password !== confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+
+        setIsSubmitting(true);
+
         try {
-            await axios.post(`${API_BASE_URL}/auth/forgot-password`,
-                {
-                    token,
-                    new_password: password
-                }
-            );
+            await resetPassword(token, password);
             alert("Password reset successful");
-            navigate("/")
+            navigate("/auth")
         } catch (error) {
-            alert("Failed to rest password");
+            setError(error.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -39,21 +51,42 @@ export default function ResetPassword() {
                     <form onSubmit={handleSubmit}>
                         <div className="input-group">
                             <label>New Password</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <div className="password-field">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <span
+                                    className="eye-icon"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                         </div>
                         <div className="input-group">
                             <label>Confirm Password</label>
-                            <imput
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                            />
+                            <div className="password-field">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                                <span
+                                    className="eye-icon"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                >
+                                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                         </div>
-                        <button type="submit" className="login-btn">Reset Password</button>
+                        {error && <p className="auth-message error">{error}</p>}
+                        <button type="submit" className="login-btn" disabled={isSubmitting}>
+                            {isSubmitting ? "Resetting..." : "Reset Password"}
+                        </button>
                     </form>
                 </div>
             </div>

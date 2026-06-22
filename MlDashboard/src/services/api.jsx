@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 console.log("API_BASE_URL =", API_BASE_URL)
 
 const getStoredUser = () => {
@@ -45,8 +45,28 @@ export const loginUser = async (credentials) => {
 
 
 export const forgotPassword = async (email) => {
-    const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
-    return response.data;
+    try {
+        const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.detail || "Failed to send reset link";
+        throw new Error(message);
+    }
+}
+
+export const resetPassword = async (token, newPassword) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/auth/reset-password`, 
+            { 
+                token, 
+                new_password: newPassword 
+            }
+        );
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.detail || "Failed to reset password";
+        throw new Error(message);
+    }
 }
 
 

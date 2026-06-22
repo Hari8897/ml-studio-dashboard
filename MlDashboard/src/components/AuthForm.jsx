@@ -50,6 +50,7 @@ function AuthForm (){
                     "user", 
                     JSON.stringify(user)
                 ); 
+                window.dispatchEvent(new Event("user-updated"));
                 //alert("Login successful!");
                 //alert("Reached here successfully");
 
