@@ -11,13 +11,13 @@ function Results({ results }) {
         return String(value ?? "-");
     };
 
-    const topPredictions = results?.predictions?.slice(0, 5) || [];
+    const topPredictions = results?.predictions?.slice(0, 8) || [];
     const actualValues = results?.actual_values || results?.actuals || [];
     const canCompareActuals = topPredictions.length > 0 && actualValues.length > 0;
     const evaluationMetrics = Object.entries(results?.metrics || {});
     const topFeatures = [...(results?.feature_importance || [])]
         .sort((a, b) => Number(b.importance) - Number(a.importance))
-        .slice(0, 5);
+        .slice(0, 8 );
 
     if (!results || results.error) {
         return (
@@ -61,7 +61,7 @@ function Results({ results }) {
             <div className="results-grid">
                 <section className="result-block">
                     <div className="result-block-header">
-                        <h3>{canCompareActuals ? "Prediction vs actual" : "Top 5 predictions"}</h3>
+                        <h3>{canCompareActuals ? "Prediction vs actual" : "Top 8 predictions"}</h3>
                     </div>
 
                     {topPredictions.length > 0 ? (
