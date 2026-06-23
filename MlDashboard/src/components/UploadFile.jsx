@@ -27,6 +27,7 @@ function UploadSection({ onUpload }) {
                 onChange={handleFileUpload}
                 className="file-input"
                 accept=".csv,.xlsx,.xls"
+                required
             />
             {fileName && (
                 <p className="file-name">{fileName}</p>

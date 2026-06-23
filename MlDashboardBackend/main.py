@@ -68,10 +68,13 @@ class TrainRequest(BaseModel):
 # ----------- Response Schema -----------
 class TrainResponse(BaseModel):
     model: str
-    predictions: List[float]
+    predictions: List[Any]
+    actual_values: List[Any]
     score: float
     metric: str
-    feature_importance: dict
+    problem_type: str
+    metrics: Dict[str, Any]
+    feature_importance: List[Dict[str, Any]]
 
 
 dataStore = {}

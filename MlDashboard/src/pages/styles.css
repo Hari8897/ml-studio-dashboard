@@ -15,6 +15,35 @@ select {
     font: inherit;
 }
 
+input:required,
+select:required,
+textarea:required {
+    border-color: #b6c4d8;
+}
+
+input:required:hover,
+select:required:hover,
+textarea:required:hover {
+    border-color: #2563eb;
+    background: #f8fbff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+input:required:focus,
+select:required:focus,
+textarea:required:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.input-group:has(:required) > label::after,
+.field-group:has(:required) > label::after,
+.upload-control:has(:required) > label::after {
+    content: " *";
+    color: #dc2626;
+    font-weight: 700;
+}
+
 .dashboard-container {
     min-height: calc(100vh - 74px);
     display: flex;

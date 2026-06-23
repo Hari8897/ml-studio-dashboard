@@ -1,7 +1,15 @@
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
-from sklearn.metrics import accuracy_score, r2_score
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    mean_absolute_error,
+    mean_squared_error,
+    precision_score,
+    r2_score,
+    recall_score,
+)
 import pandas as pd
 import numpy as np
 
@@ -28,6 +36,7 @@ def trainModel(X, y):
     predictions= []
     score = 0
     metric = ""
+    evaluation_metrics = {}
     
     if problem_type =="classification":
         lr = LogisticRegression(max_iter=1000)
@@ -52,6 +61,12 @@ def trainModel(X, y):
             score = lr_score
             modelName = "LogisticRegression"
         metric = "accuracy"
+        evaluation_metrics = {
+            "Accuracy": float(accuracy_score(y_test, predictions)),
+            "Precision": float(precision_score(y_test, predictions, average="weighted", zero_division=0)),
+            "Recall": float(recall_score(y_test, predictions, average="weighted", zero_division=0)),
+            "F1 Score": float(f1_score(y_test, predictions, average="weighted", zero_division=0)),
+        }
 
     else:
         lr = LinearRegression()
@@ -77,6 +92,13 @@ def trainModel(X, y):
             score = lr_score
             modelName = "LinearRegression"
         metric = "r2 Score"
+        mse = mean_squared_error(y_test, predictions)
+        evaluation_metrics = {
+            "R2 Score": float(r2_score(y_test, predictions)),
+            "MAE": float(mean_absolute_error(y_test, predictions)),
+            "MSE": float(mse),
+            "RMSE": float(np.sqrt(mse)),
+        }
 
     importance = []
     if hasattr(model, "feature_importances_"):
@@ -99,7 +121,10 @@ def trainModel(X, y):
     return {
         "model":modelName,
         "predictions":predictions.tolist(),
+        "actual_values":y_test.tolist(),
         "score":float(score),
         "metric":metric,
+        "problem_type":problem_type,
+        "metrics":evaluation_metrics,
         "feature_importance":importance
         }

@@ -44,7 +44,7 @@ function Dashboard() {
         encoding: "label",
         scaling: "none",
     });
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState(null);
     const [dropColumns, setDropColumns] = useState([]);
   
 

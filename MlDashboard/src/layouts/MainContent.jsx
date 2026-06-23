@@ -79,6 +79,7 @@ function MainContent({
                             <select
                                 value={selectedDatasetId}
                                 onChange={(e) => setSelectedDatasetId(e.target.value)}
+                                required
                             >
                                 <option value="">Select Dataset</option>
                                 {userDatasets.map(dataset => (
@@ -146,7 +147,7 @@ function MainContent({
                     <section className="panel control-panel">
                         <div className="field-group">
                             <label>Target column</label>
-                            <select onChange={(e) => setTarget(e.target.value)}>
+                            <select onChange={(e) => setTarget(e.target.value)} required>
                                 <option value="">Select Target</option>
                                 {columns.map((col, i) => (
                                     <option key={i} value={col}>{col}</option>
@@ -158,6 +159,7 @@ function MainContent({
                             <select
                                 value={options.missing_num}
                                 onChange={(e) => setOptions({ ...options, missing_num: e.target.value })}
+                                required
                             >
                                 <option value="mean">Mean</option>
                                 <option value="median">Median</option>
@@ -169,6 +171,7 @@ function MainContent({
                             <select
                                 value={options.missing_cat}
                                 onChange={(e) => setOptions({ ...options, missing_cat: e.target.value })}
+                                required
                             >
                                 <option value="mode">Mode</option>
                             </select>
@@ -178,6 +181,7 @@ function MainContent({
                             <select
                                 value={options.encoding}
                                 onChange={(e) => setOptions({ ...options, encoding: e.target.value })}
+                                required
                             >
                                 <option value="onehot">One-Hot</option>
                                 <option value="label">Label</option>
@@ -188,6 +192,7 @@ function MainContent({
                             <select
                                 value={options.scaling}
                                 onChange={(e) => setOptions({ ...options, scaling: e.target.value })}
+                                required
                             >
                                 <option value="none">None</option>
                                 <option value="standard">Standard</option>
@@ -237,22 +242,57 @@ function MainContent({
                     </section>
 
                     <section className="panel">
-                        <div className="field-group wide-field">
-                            <label>Drop unwanted columns</label>
-                            <select
-                                multiple={true}
-                                value={dropColumns}
-                                onChange={(e) => {
-                                    const selectedValues = [...e.target.selectedOptions].map(
-                                        (option) => option.value);
-                                    setDropColumns(selectedValues);
-                                }}
-                            >
-                                {columns.map((col, i) => (
-                                    <option key={i} value={col}>{col}</option>
-                                ))}
-                            </select>
+                        <div className="panel-header training-header">
+                            <div>
+                                <h2>Training setup</h2>
+                                <p>Select columns to remove before training.</p>
+                            </div>
+                            {dropColumns.length > 0 && (
+                                <button
+                                    className="secondary-action"
+                                    type="button"
+                                    onClick={() => setDropColumns([])}
+                                >
+                                    Clear
+                                </button>
+                            )}
                         </div>
+
+                        <div className="drop-column-grid" aria-label="Drop unwanted columns">
+                            {columns.length === 0 ? (
+                                <div className="empty-state">Upload and preprocess a dataset to choose columns.</div>
+                            ) : (
+                                columns.map((col, i) => {
+                                    const checked = dropColumns.includes(col);
+
+                                    return (
+                                        <label className="drop-column-option" key={`${col}-${i}`}>
+                                            <input
+                                                type="checkbox"
+                                                checked={checked}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setDropColumns([...dropColumns, col]);
+                                                        return;
+                                                    }
+
+                                                    setDropColumns(dropColumns.filter((column) => column !== col));
+                                                }}
+                                            />
+                                            <span>{col}</span>
+                                        </label>
+                                    );
+                                })
+                            )}
+                        </div>
+
+                        {dropColumns.length > 0 && (
+                            <div className="selected-columns">
+                                {dropColumns.map((col) => (
+                                    <span key={col}>{col}</span>
+                                ))}
+                            </div>
+                        )}
                     </section>
 
                     <section className="panel">

@@ -1,13 +1,235 @@
-.prediction {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-
+.results-view {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
+
+.results-empty {
+    display: grid;
+    gap: 8px;
+    border: 1px dashed #cfd8e6;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 24px;
+    text-align: center;
+}
+
+.results-empty h2,
+.results-header h2,
+.result-block h3 {
+    margin: 0;
+    color: #0f172a;
+    font-weight: 650;
+}
+
+.results-empty p,
+.muted,
+.model-type {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.model-type {
+    margin-top: 6px;
+    text-transform: capitalize;
+}
+
+.results-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.score-card {
+    min-width: 160px;
+    border: 1px solid #dbe3ef;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 12px 14px;
+    text-align: right;
+}
+
+.score-card span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.score-card strong {
+    display: block;
+    margin-top: 4px;
+    color: #0f172a;
+    font-size: 24px;
+    font-weight: 650;
+}
+
+.evaluation-panel {
+    border: 1px solid #e5eaf2;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 16px;
+}
+
+.metric-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.metric-card-mini {
+    min-width: 0;
+    border: 1px solid #edf1f7;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 12px;
+}
+
+.metric-card-mini span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.metric-card-mini strong {
+    display: block;
+    margin-top: 5px;
+    color: #0f172a;
+    font-size: 19px;
+    font-weight: 650;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+}
+
+.result-block {
+    min-width: 0;
+    border: 1px solid #e5eaf2;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 16px;
+}
+
+.result-block-header {
+    margin-bottom: 12px;
+}
+
+.result-block h3 {
+    font-size: 16px;
+}
+
+.prediction-table {
+    display: grid;
+    overflow: hidden;
+    border: 1px solid #edf1f7;
+    border-radius: 8px;
+}
+
+.prediction-row {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    min-height: 42px;
+    padding: 9px 12px;
+    color: #334155;
+    font-size: 14px;
+}
+
+.prediction-row:not(:last-child) {
+    border-bottom: 1px solid #edf1f7;
+}
+
+.prediction-row.prediction-head {
+    min-height: 38px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 650;
+    text-transform: uppercase;
+}
+
+.prediction-row strong {
+    color: #0f172a;
+    font-weight: 650;
+}
+
+.prediction-row span,
+.prediction-row strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prediction-row.prediction-only {
+    grid-template-columns: 48px minmax(0, 1fr);
+}
+
 .features {
+    display: grid;
+    gap: 12px;
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
+.features li {
+    display: grid;
+    gap: 7px;
+}
 
+.feature-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #334155;
+    font-size: 14px;
+}
+
+.feature-line span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.feature-line strong {
+    color: #0f172a;
+    font-weight: 650;
+}
+
+.feature-bar {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #e5eaf2;
+}
+
+.feature-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #2563eb;
+}
+
+@media screen and (max-width: 760px) {
+    .results-header,
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-header {
+        flex-direction: column;
+    }
+
+    .score-card {
+        width: 100%;
+        text-align: left;
+    }
+}

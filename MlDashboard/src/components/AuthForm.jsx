@@ -108,6 +108,7 @@ function AuthForm (){
                                     placeholder="Enter your username."
                                     value={formData.username}
                                     onChange={handleChange}
+                                    required={!isLogin}
                                 />
                             </div>
                         )}
@@ -121,6 +122,7 @@ function AuthForm (){
                                 placeholder="Enter your email..."
                                 value={formData.email}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
 

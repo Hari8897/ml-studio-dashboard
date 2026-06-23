@@ -10,6 +10,12 @@
     font-weight: 800;
 }
 
+.upload-control:has(:required) label::after {
+    content: " *";
+    color: #dc2626;
+    font-weight: 700;
+}
+
 .file-input {
     width: 100%;
     min-height: 46px;
@@ -19,6 +25,13 @@
     color: #334155;
     padding: 10px;
     cursor: pointer;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.file-input:required:hover {
+    border-color: #2563eb;
+    background: #f8fbff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 .file-input::file-selector-button {

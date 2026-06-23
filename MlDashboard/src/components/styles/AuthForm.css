@@ -55,6 +55,12 @@ p {
     margin-bottom: 8px;
 }
 
+.input-group:has(:required) > label::after {
+    content: " *";
+    color: #dc2626;
+    font-weight: 700;
+}
+
 .password-field {
     position: relative;
     width: 100%;
@@ -98,6 +104,19 @@ p {
     border-radius: 8px;
     font-size: 16px;
     box-sizing: border-box;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.input-group input:required:hover {
+    border-color: #2563eb;
+    background: #f8fbff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.input-group input:required:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
 }
 
 
