@@ -1,8 +1,8 @@
-import './styles/AuthForm.css'
+import '../../styles/AuthForm.css'
 
 import { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser, loginUser } from "../services/api";
+import { registerUser, loginUser } from "../../services/api";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
@@ -167,7 +167,7 @@ function AuthForm (){
                         className="toggle-link" 
                         onClick={() => setIsLogin(!isLogin)}
                         >
-                            {isLogin ? <a href="#"> Register here.</a>  : <a href="#"> Login here.</a>}
+                            {isLogin ? <a href="#"> Register here.</a>  : <span> Login here.</span>}
                         </span>
                     </p>
                 </div>          

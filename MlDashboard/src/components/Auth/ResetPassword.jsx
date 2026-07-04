@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { resetPassword } from "../services/api";
+import { resetPassword } from "../../services/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "../components/styles/AuthForm.css";
+import "../../styles/AuthForm.css";
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("");

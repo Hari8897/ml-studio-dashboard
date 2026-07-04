@@ -1,9 +1,9 @@
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
-import Dashboard from './pages/Dashboard'
+import Dashboard from './layouts/Dashboard'
 import AuthPage from "./pages/AuthPage"
 import Navbar from "./layouts/Navbar";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./components/Auth/ForgotPassword";
+import ResetPassword from "./components/Auth/ResetPassword";
 
 function App() { 
     return (

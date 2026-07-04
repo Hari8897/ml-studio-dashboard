@@ -1,6 +1,6 @@
 import React from "react";
 import { FaChartBar, FaDatabase, FaPlay, FaSlidersH } from "react-icons/fa";
-import "./styles/home.css";
+import "../styles/home.css";
 
 const Home = ({ setActiveStep }) => {
     const actions = [

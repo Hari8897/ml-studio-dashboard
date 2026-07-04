@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import PreprocessData from "../components/PreprocessData";
-import Table from "../components/Table";
-import Results from "../components/Result";
-import Heatmap from "../components/Heatmap";
-import Home from "./Home";
-import "./styles/maincontent.css";
-import UploadSection from "../components/UploadFile";
+import PreprocessData from "../components/Dataset/PreprocessData";
+import Table from "../components/Dataset/Table";
+import Results from "../components/Model/Result";
+import Heatmap from "../components/Dataset/Heatmap";
+import Home from "../pages/Home";
+import "../styles/maincontent.css";
+import UploadSection from "../components/Dataset/UploadFile";
 
 function MainContent({
     activeStep,

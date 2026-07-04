@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { uploadFile } from "../services/api";
-import "./styles/uploadfile.css";
+import { uploadFile } from "../../services/api";
+import "../../styles/uploadfile.css";
 
 function UploadSection({ onUpload }) {
     const [fileName, setFileName] = useState("");

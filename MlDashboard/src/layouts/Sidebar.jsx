@@ -1,7 +1,7 @@
 ﻿
 import React from "react";
 import { FaChartLine, FaDatabase, FaHome, FaProjectDiagram, FaSlidersH } from "react-icons/fa";
-import "./styles/sidebar.css";
+import "../styles/sidebar.css";
 
 const Sidebar=({
     setActiveStep,

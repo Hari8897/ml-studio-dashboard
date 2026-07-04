@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaBell, FaBolt, FaRegUserCircle, FaSignOutAlt } from "react-icons/fa";
-import "./styles/Navbar.css";
+import "../styles/Navbar.css";
 
 const getStoredUser = () => {
     const storedUser = localStorage.getItem("user");

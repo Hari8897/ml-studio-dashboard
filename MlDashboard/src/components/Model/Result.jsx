@@ -1,4 +1,4 @@
-import "./styles/result.css";
+import "../../styles/result.css";
 
 function Results({ results }) {
     const formatValue = (value) => {
@@ -17,7 +17,7 @@ function Results({ results }) {
     const evaluationMetrics = Object.entries(results?.metrics || {});
     const topFeatures = [...(results?.feature_importance || [])]
         .sort((a, b) => Number(b.importance) - Number(a.importance))
-        .slice(0, 8 );
+        .slice(0, 8);
 
     if (!results || results.error) {
         return (

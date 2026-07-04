@@ -1,4 +1,4 @@
-﻿import './styles/table.css';
+﻿import '../../styles/table.css';
 
 
 export default function Table({ columns, data, filteredData }) {

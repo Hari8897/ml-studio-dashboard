@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchProcessedData, fetchSelectTargetData, getDatasetPreview, getUserDatasets, trainModel } from "../services/api";
-import Sidebar from "../layouts/Sidebar";
-import MainContent from "../layouts/MainContent";
-import Navbar from "../layouts/Navbar";
-import "./styles.css";
-//import AuthForm from "../components/AuthPage";
+import Sidebar from "./Sidebar";
+import MainContent from "./MainContent";
+import "../styles/dashboard.css";
 
 
 const ROUTE_STEPS = {
@@ -214,12 +212,7 @@ function Dashboard() {
 
 
     return (
-        <div className="dashboard-container">
-           <div className="navbar-container">
-
-
-           </div>
-               
+        <div className="dashboard-container">               
             <div className="dashboard-body">
                 <div className="sidebar-container">
                     <Sidebar

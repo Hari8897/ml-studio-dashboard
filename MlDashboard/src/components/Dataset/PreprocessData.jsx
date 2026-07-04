@@ -1,4 +1,4 @@
-﻿import "./styles/preprocessdata.css"
+﻿import "../../styles/preprocessdata.css"
 
 function PreprocessData({ features = [], targetData = [] }) {
 
