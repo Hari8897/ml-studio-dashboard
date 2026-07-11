@@ -3,7 +3,7 @@ import PreprocessData from "../components/Dataset/PreprocessData";
 import Table from "../components/Dataset/Table";
 import Results from "../components/Model/Result";
 import Heatmap from "../components/Dataset/Heatmap";
-import Home from "../pages/Home";
+import Home from "../pages/DashboardOverview";
 import "../styles/maincontent.css";
 import UploadSection from "../components/Dataset/UploadFile";
 
@@ -55,8 +55,8 @@ function MainContent({
     const filteredRows = filteredData?.length || 0;
 
     switch (activeStep) {
-        case "home":
-            return <Home setActiveStep={setActiveStep} />;
+        case "dashboard":
+            return <DashboardOverview setActiveStep={setActiveStep} />;
 
         case "upload":
             return (

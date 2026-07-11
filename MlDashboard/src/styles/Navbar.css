@@ -1,3 +1,26 @@
+:root {
+    --primary-color: #2563eb;
+    --primary-color-light: rgba(37, 99, 235, 0.22);
+    --primary-color-dark: rgba(37, 99, 235, 0.8);
+    --secondary-color: #6c4df6;
+    --secondary-color-light: rgba(108, 77, 246, 0.22);
+    --secondary-color-dark: rgba(108, 77, 246, 0.8);
+    --text-color: #ffffff;
+    --text-color-light: rgba(255, 255, 255, 0.7);
+    --text-color-dark: rgba(255, 255, 255, 0.9);
+}
+
+
+input {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #cbd5e1;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
 .navbar {
     position: sticky;
     top: 0;
@@ -8,14 +31,16 @@
     justify-content: space-between;
     gap: 24px;
     padding: 0 28px;
-    background: #0f172a;
-    color: #ffffff;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+    background: #fff;
+    color: black;
+
 }
 
 .logo {
-    display: flex;
-    align-items: center;
+    display: grid;
+    place-items: center;
+    color: #6c4df6;
+    height: 100%;
 }
 
 .brand-button {

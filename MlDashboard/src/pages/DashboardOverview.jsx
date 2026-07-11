@@ -1,8 +1,12 @@
 import React from "react";
-import { FaChartBar, FaDatabase, FaPlay, FaSlidersH } from "react-icons/fa";
-import "../styles/home.css";
+import { FaChartBar, FaDatabase, FaPlay, FaSlidersH,FaCalendarAlt,
+    FaBrain, FaTrophy, FaFlask, FaChartLine, FaStar
 
-const Home = ({ setActiveStep }) => {
+} from "react-icons/fa";
+import "../styles/dashboardoverview.css";
+import PageHeader from "../components/DashboardOverview/PageHeader";
+
+const DashboardOverview = ({ setActiveStep }) => {
     const actions = [
         {
             title: "Upload Data",
@@ -28,23 +32,44 @@ const Home = ({ setActiveStep }) => {
             icon: <FaPlay />,
             step: "result",
         },
+
+
+    ];
+    const stats = [
+        { label: "Datasets", value: "12", description: "2 this week", icon: <FaDatabase />, color: "purple" },
+        { label: "Models Trained", value: "7", description: "1 this week", icon: <FaBrain />, color: "green" },
+        { label: "Best Accuracy", value: "94.3%", description: "XGBoost Classifier", icon: <FaTrophy />, color: "blue" },
+        { label: "Experiments", value: "15", description: "3 this week", icon: <FaFlask />, color: "orange" },
+        { label: "Total Predictions", value: "3,245", description: "12% this week", icon: <FaChartLine />, color: "violet" },
     ];
 
     return (
         <div className="dashboard-home">
-            <section className="page-heading">
-                <div>
-                    <span className="eyebrow">Machine learning workspace</span>
-                    <h1>Build, inspect, and train models from one clean workflow.</h1>
-                    <p>Move from dataset upload to preprocessing, visualization, and model results without leaving the dashboard.</p>
-                </div>
-                <button className="primary-action" type="button" onClick={() => setActiveStep("upload")}>
-                    <FaDatabase />
-                    Upload Dataset
-                </button>
+            <PageHeader 
+                title="Dashboard"
+                subtitle="Welcome back, Hari!👋 Here's what's happening with your ML projects today."
+            >
+                <button className="date-button" type="button">
+                <FaCalendarAlt /> 09 July 2026
+            </button>
+            </PageHeader> 
+            <section className="stat-grid">
+                {stats.map((stat)=>(
+                    <article className="stat-card" key={stat.label}>
+                        <span className={`stat-icon ${stat.color}`}>
+                            {stat.icon}
+                        </span>
+                        <div>
+                            <p>{stat.label}</p>
+                            <strong>{stat.value}</strong>
+                            <small>{stat.description}</small>
+                        </div>
+                    </article>
+                )
+                )}
             </section>
-
             <section className="metric-grid">
+
                 <div className="metric-card">
                     <span>Workflow</span>
                     <strong>5 Steps</strong>
@@ -60,7 +85,22 @@ const Home = ({ setActiveStep }) => {
                     <strong>Ready</strong>
                     <p>Missing values, encoding, scaling</p>
                 </div>
+                <div className="metric-card">
+
+                </div>
+                <div className="metric-card">
+
+                </div>
             </section>
+
+            <section className="page-heading">
+                <button className="primary-action" type="button" onClick={() => setActiveStep("upload")}>
+                    <FaDatabase />
+                    Upload Dataset
+                </button>
+            </section>
+
+
 
             <section className="action-grid">
                 {actions.map((action) => (
@@ -80,4 +120,4 @@ const Home = ({ setActiveStep }) => {
     );
 };
 
-export default Home;
+export default DashboardOverview;

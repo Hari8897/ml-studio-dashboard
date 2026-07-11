@@ -1,205 +1,91 @@
 ﻿
 import React from "react";
-import { FaChartLine, FaDatabase, FaHome, FaProjectDiagram, FaSlidersH } from "react-icons/fa";
+import {
+    FaBars,
+    FaBell,
+    FaBrain,
+    FaCalendarAlt,
+    FaChartBar,
+    FaChartLine,
+    FaCloudUploadAlt,
+    FaCog,
+    FaDatabase,
+    FaDownload,
+    FaEye,
+    FaFlask,
+    FaHome,
+    FaMoon,
+    FaPlay,
+    FaRocket,
+    FaSearch,
+    FaSignOutAlt,
+    FaSlidersH,
+    FaStar,
+    FaTrash,
+    FaTrophy,
+    FaUser,
+    FaProjectDiagram
+} from "react-icons/fa";
 import "../styles/sidebar.css";
 
 const Sidebar=({
     setActiveStep,
     activeStep,
-    // onUpload,
-    // columns,
-    // setTarget, options,
-    // setOptions,
-    // setDropColumns,
-    // dropColumns,
-    // handlePreprocess,
-    // handleModelTraining,
-
-    // uptonow working fine1
 }) => {
-    
-    // const steps = [
-    //     {key: "home", label: "🏠Home"},
-    //     {key: "upload", label: "📂Upload / View Data"},
-    //     {key: "preprocess", label: "🧹Preprocess Data"},
-    //      { key: "visualize", label: "📊 Visualize" },
-    //     {key: "results", label: "📈Results"},
-    //     {key: "heatmap", label: "Correlation Heatmap"},
+    const groups = [
+        {
+            label:"Main",
+            items: [
+                ["dashboard", "Dashboard", <FaHome/>],
+                ["upload", "Upload Dataset", <FaCloudUploadAlt/>],
+                ["preprocess", "Preprocessing", <FaSlidersH/>],
+                ["visualize", "Visualize", <FaChartBar/>],
+                ["train", "Train Model", <FaPlay/>],
+                ["results", "Model Results", <FaChartLine/>],
+                ["features", "Feature Importance", <FaStar/>],
 
-    // ];
-
-    const steps = [
-        { key: "home", label: "Overview", icon: <FaHome /> },
-        { key: "upload", label: "Data Library", icon: <FaDatabase /> },
-        { key: "preprocess", label: "Preprocess", icon: <FaSlidersH /> },
-        { key: "visualize", label: "Visualize", icon: <FaProjectDiagram /> },
-        { key: "result", label: "Model Results", icon: <FaChartLine /> },
-    ];
+            ],
+        },
+        {
+            label: "Account",
+            items: [
+                ["settings", "Settings", <FaCog />],
+                ["profile", "Profile", <FaUser />],
+                ["logout", "Logout", <FaSignOutAlt />],
+            ],
+        },
+    ]
 
     return (
-        <div className="sidebar">
-             <div className="sidebar-header">
-                <span className="sidebar-mark">ML</span>
-                <div>
-                    <h2>Studio</h2>
-                    <p>Workflow controls</p>
-                </div>
-             </div>
-
-            <ul className="menu">
-                {steps.map((step) => (
-                    <li
-                        key={step.key}
-                        className={activeStep === step.key ? "active" : ""}
-                        onClick={() => setActiveStep(step.key)}
-                    >
-                        <span className="menu-icon">{step.icon}</span>
-                        <span>{step.label}</span>
-                    </li>
-                ))}
-            </ul>
-
-            <div className="sidebar-status">
-                <span className="status-dot" />
-                <div>
-                    <strong>Ready</strong>
-                    <p>Upload data to begin training.</p>
-                </div>
+        <div className="studio-sidebar">
+            <div className="sidebar-header">
+                <ul className="menu">
+                {groups.map((group) => (
+                    <div key={group.label}>
+                        <h3 className="menu-label">{group.label}</h3>
+                        {group.items.map(([key, label, icon]) => (
+                            <li
+                                key={key}
+                                className={activeStep === key ? "active" : ""}
+                                onClick={() => setActiveStep(key)}
+                            >
+                                <span className="menu-icon">{icon}</span>
+                                <span>{label}</span>
+                            </li>
+                        ))};
+                    </div>
+                ))};
+                </ul>
+                
             </div>
-
-            {/*Step based controls */} 
-
-            {/*Upload Section */}  
-
-            {/* {activeStep === "upload" && (
-                <section className="section-group">
-                    <h3>📂 Upload / View Data</h3>
-                    <UploadSection onUpload={onUpload} />
-                </section>
-            )}      */}
-           
-            {/* {activeStep === "preprocess" && (
-                    <>
-                        <h3>🧹 Preprocessing Controls</h3>
-
-                            <section className="section-group">
-                                <label>Target Column </label>
-                                <select onChange={(e) => setTarget(e.target.value)}>
-                                    <option value="">Select Target </option>
-                                    {columns.map((col, i) => (
-                                        <option key={i} value={col}>{col}</option>
-                                    ))}
-                                </select>
-                            </section>
-                            
-                            <section className="section-group">
-                                <h4>Missing Handling </h4>
-                                <label>Numerical</label>
-                                <select
-                                    value={options.missing_num}
-                                    onChange={(e) =>
-                                         setOptions({ ...options, missing_num: e.target.value })
-                                        }
-                                >
-                                    <option value="mean">Mean</option>
-                                    <option value="median">Median</option>
-                                    <option value="drop">Drop</option>
-                                </select >
-                                <label>Categorical</label>
-                                <select
-                                    value={options.missing_cat}
-                                    onChange={(e) => 
-                                        setOptions({ ...options, missing_cat: e.target.value })
-                                        } >  
-                                            <option value="mode">Mode</option>
-                                </select>
-                            </section>
-
-                            <section className="section-group">
-                                <label>Encoding</label>
-                                <select 
-                                 value={options.encoding} 
-                                  onChange={(e) => 
-                                  setOptions({ ...options, encoding: e.target.value })
-                                  }  >   
-                                    <option value="onehot">One-Hot</option>
-                                    <option value="label">Label</option>
-                                </select>
-                            </section>
-
-                            <section className="section-group">
-                                <label>Scaling</label>
-                                <select
-                                    value={options.scaling}
-                                    onChange={(e) => setOptions({ ...options, scaling: e.target.value })
-                                }
-                                >
-                                    <option value="standard">StandardScaler</option>
-                                    <option value="none">None</option>
-                                    <option value="minmax">MinMaxScaler</option>
-                                </select>
-                            </section>
-                             <button className="btn" 
-                                onClick={() => {
-                                    handlePreprocess();
-                                    setActiveStep("preprocess");
-                                }}>
-                                    Run Preprocess
-                                    
-                                    </button>
-
-                            </>
-            )} */}
-
-            {/* Visualization step */}
-            {/* {activeStep === "visualize" && (
-                        <>
-                            <h3>📊 Visualization Controls</h3>
-                            <button className="btn" 
-                            onClick={() => 
-                            setActiveStep("heatmap")
-                            }>
-                                Show Correlation Heatmap
-                            </button>  
-                        </> 
-            )} */}
-
-            {/* Model Training Step */}
-            {/*{activeStep === "result" && (
-                <>
-                {/* <h3>📈 Model Training & Results</h3 >                           
-                <section className="section-group">
-                    <label>Drop Unwanted Columns</label>
-                    <select 
-                        multiple={true} 
-                        value={dropColumns}
-                        onChange={(e) => {
-                                const selectedValues = [...e.target.selectedOptions].map(
-                                    (option) => option.value);   
-                                setDropColumns(selectedValues);
-                            }} >
-                            {columns.map((col, i) => (  
-                                <option
-                                    key={i}
-                                    value={col}
-                                    >
-                                    {col}
-                                </option>
-                            ))}
-                        </select>
-                    </section> 
-                     <button 
-                        className="btn train" 
-                        onClick={() => {
-                            handleModelTraining();
-                            setActiveStep("result");
-                        }}
-                        >
-                            Train Model
-                     </button> 
-                           
-                </>
-            )} */}  
+            <div className="upgrade-panel">
+                <span>
+                    <FaRocket />
+                </span>
+                <strong>Upgrade to Pro</strong>
+                <p>Unlock advanced features and analytics.</p>
+                <button type="button">Upgrade Now</button>
+            </div>            
         </div>
     );
 };
