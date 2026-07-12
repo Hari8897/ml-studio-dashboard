@@ -4,16 +4,20 @@
     gap: 22px;
 }
 
-.page-heading {
+.page {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
     padding: 28px;
-    border: 1px solid #e5eaf2;
     border-radius: 8px;
     background: #ffffff;
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.stat-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .eyebrow {
@@ -43,25 +47,38 @@
     line-height: 1.6;
 }
 
+.stat-grid,
 .metric-grid,
 .action-grid {
     display: grid;
     gap: 16px;
 }
 
-.metric-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.stat-grid{
+    grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.metric-card,
-.action-card {
+.metric-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.stat-card,.metric-card,.action-card {
     border: 1px solid #e5eaf2;
     border-radius: 8px;
     background: #ffffff;
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.045);
 }
+.stat-card{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+}
 
 .metric-card {
+
     padding: 18px;
 }
 
@@ -133,6 +150,7 @@
 
 @media screen and (max-width: 1100px) {
     .metric-grid,
+    .stat-grid,
     .action-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -149,6 +167,7 @@
     }
 
     .metric-grid,
+    .stat-grid,
     .action-grid {
         grid-template-columns: 1fr;
     }

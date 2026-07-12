@@ -3,6 +3,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi_mail import ConnectionConfig
+import socket
 
 env_path = Path(__file__).parent.parent / ".env"
 load_dotenv(env_path)
@@ -15,13 +16,20 @@ conf = ConnectionConfig(
     MAIL_USERNAME=mail_username,
     MAIL_PASSWORD=mail_password,
     MAIL_FROM=mail_from,
-    MAIL_PORT=int(os.getenv("MAIL_PORT", "587")),
+    MAIL_PORT=int(os.getenv("MAIL_PORT", "465")),
     MAIL_SERVER=os.getenv("MAIL_SERVER", "smtp.gmail.com"),
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
+    MAIL_SSL_TLS=True,
+    MAIL_STARTTLS=False,  
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True,
+    TIMEOUT=60,
 )
+
+try:
+    socket.create_connection(("smtp.gmail.com", 465), timeout=60)
+    print("SMTP connection successful")
+except Exception as e:
+    print("SMTP connection failed:", e)
 
 
 def build_password_reset_template(username: str, reset_link: str) -> str:

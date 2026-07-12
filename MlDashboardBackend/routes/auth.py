@@ -13,6 +13,8 @@ from database.db_models import User, PasswordResetToken
 from utils.security import hash_password, verify_password
 from pydantic import BaseModel, EmailStr
 
+import socket
+
 router = APIRouter()
 
 @router.post("/register")
@@ -67,6 +69,20 @@ def register(
 
         return {
             "error": str(e)
+        }
+        
+@router.get("/smtp-test")
+async def smtp_test():
+    try: 
+        socket.create_connection(("smtp.gmail.com", 465), timeout=60)
+        return {
+            "status": "success",
+            "message": "SMTP connection successful"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"SMTP connection failed: {str(e)}"
         }
 
 

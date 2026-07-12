@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaBell, FaBolt, FaRegUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaBell, FaBolt, FaRegUserCircle,FaBrain, FaSignOutAlt } from "react-icons/fa";
 import "../styles/Navbar.css";
 
 const getStoredUser = () => {
@@ -60,11 +60,12 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="logo">
-                <button type="button" className="brand-button" onClick={() => navigate("/dashboard")}>
-                    <span className="brand-mark">ML</span>
-                    <span className="brand-copy">
+                <button className="studio-brand" type="button" onClick={() => navigate("/dashboard")}>                               <span className="brain-mark">
+                        <FaBrain />
+                    </span>
+                    <span>
                         <strong>ML Studio</strong>
-                        <small>Dashboard</small>
+                        <small>Machine Learning Studio</small>
                     </span>
                 </button>
             </div>
