@@ -10,6 +10,7 @@ const ROUTE_STEPS = {
     "/upload": "upload",
     "/preprocess": "preprocess",
     "/visualize": "visualize",
+    "/train": "train",
     "/model": "result",
 };
 
@@ -18,6 +19,7 @@ const STEP_ROUTES = {
     upload: "/upload",
     preprocess: "/preprocess",
     visualize: "/visualize",
+    train: "/train",
     result: "/model",
 };
 
@@ -44,6 +46,8 @@ function Dashboard() {
     });
     const [results, setResults] = useState(null);
     const [dropColumns, setDropColumns] = useState([]);
+
+    const [datasetName, setDatasetName] = useState("");
   
 
 
@@ -58,7 +62,7 @@ function Dashboard() {
                 }
                 setLoadingDatasets(true);
 
-                const data = await (getUserDatasets(user.id));
+                const data = await (getUserDatasets(user.user_id));
                 //console.log("Datasets:", data)
 
                 const uniqueDatasets = [
@@ -84,6 +88,7 @@ function Dashboard() {
             try {
                 const data = await getDatasetPreview(selectedDatasetId);
                 //console.log("Dataset Preview:", data);
+                setDatasetName(data.datasetname || "Unknown");
                 setColumns(data.columns);
                 setTableData(data.preview);
             } catch (error) {
@@ -236,6 +241,7 @@ function Dashboard() {
                     <MainContent
                         columns={columns}
                         data={tableData}
+                        datasetName={datasetName}
                         userDatasets={userDatasets}
                         setUserDatasets={setUserDatasets}
                         selectedDatasetId={selectedDatasetId}
@@ -256,8 +262,7 @@ function Dashboard() {
                     />
 
                 </div>                 
-            </div>
-            
+            </div>            
         </div>
     );
 }

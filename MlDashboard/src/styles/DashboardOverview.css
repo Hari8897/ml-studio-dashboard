@@ -14,11 +14,6 @@
     background: #ffffff;
 }
 
-.stat-grid {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-}
 
 .eyebrow {
     display: inline-flex;
@@ -46,107 +41,218 @@
     font-size: 15px;
     line-height: 1.6;
 }
-
-.stat-grid,
-.metric-grid,
-.action-grid {
+.stat-grid {
     display: grid;
     gap: 16px;
-}
-
-.stat-grid{
     grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.metric-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.stat-card,.metric-card,.action-card {
+.stat-card{
     border: 1px solid #e5eaf2;
     border-radius: 8px;
     background: #ffffff;
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.045);
-}
-.stat-card{
-    padding: 10px;
+    min-height: 100px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-
-}
-
-.metric-card {
-
-    padding: 18px;
-}
-
-.metric-card span {
-    display: block;
-    color: #64748b;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.metric-card strong {
-    display: block;
-    margin-top: 8px;
-    color: #0f172a;
-    font-size: 24px;
-    font-weight: 800;
-}
-
-.metric-card p {
-    margin: 6px 0 0;
-    color: #64748b;
-    font-size: 13px;
-}
-
-.action-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.action-card {
-    min-height: 178px;
-    display: flex;
-    flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    padding: 20px;
     color: inherit;
     text-align: left;
     cursor: pointer;
     transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
-
-.action-card:hover {
+.stat-card:hover {
     transform: translateY(-2px);
     border-color: #bfdbfe;
     box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
 }
 
-.action-icon {
+.stat-info{
+    width: 70%;
+    display: grid;
+    padding: 10px;
+}
+
+.stat-icon-section{
+    width: 30%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+}
+
+.stat-icon {
     width: 40px;
     height: 40px;
     display: grid;
     place-items: center;
-    border-radius: 8px;
-    background: #eef6ff;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+/* Purple */
+.stat-icon.purple {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+/* Green */
+.stat-icon.green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+/* Blue */
+.stat-icon.blue {
+    background: #dbeafe;
     color: #2563eb;
 }
 
-.action-title {
-    color: #0f172a;
-    font-size: 17px;
-    font-weight: 800;
+/* Orange */
+.stat-icon.orange {
+    background: #ffedd5;
+    color: #ea580c;
 }
 
-.action-text {
-    color: #64748b;
-    font-size: 14px;
-    line-height: 1.5;
+/* Violet */
+.stat-icon.violet {
+    background: #ede9fe;
+    color: #8b5cf6;
 }
+
+.dashboard-overview{
+    display: flex;
+    width:100%;
+    min-height:100vh;
+    background:#f7f8fc;
+}
+
+.dashboard-overview-left{
+    width:100%;
+    display:grid;
+    align-items:stretch;
+    gap:2%;
+    margin-bottom:2%;
+    padding-right: 10px;
+
+}
+.dashboard-top{
+    width:100%;
+    display:flex;
+    align-items:stretch;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.performance-card{
+    width:70%;
+    background:#fff;
+    border-radius:10px;
+    padding:2%;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.distribution-card{
+    width:30%;
+    background:#fff;
+    border-radius:10px;
+    padding:2%;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+.activity-card{
+    width:28%;
+    background:#fff;
+    border-radius:10px;
+    height: 100vh;
+    padding:2%;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+
+    display:flex;
+    flex-direction:column;
+}
+.dashboard-bottom{
+    width:100%;
+}
+.projects-card{
+    width:100%;
+    background:#fff;
+    border-radius:18px;
+    padding:2%;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.bottom-section{
+    display:flex;
+}
+
+
+.card-header{
+    width:100%;
+    height:40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:5px;
+    padding-top: 10px;
+}
+
+.card-filter{
+    background-color: #fff;
+    border:1px solid  black;
+    height: 40px;
+    width: 100px;
+    border: 5px;
+    padding-top: 10px;
+}
+
+.performance-chart{
+    width:100%;
+    height:320px;
+}
+
+.distribution-chart{
+    width:100%;
+    height:320px;
+}
+
+
+.projects-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.project-name{
+    width:28%;
+}
+
+.dataset-name{
+    width:20%;
+}
+
+.model-name{
+    width:16%;
+}
+
+.accuracy-score{
+    width:12%;
+}
+
+.status-cell{
+    width:12%;
+}
+
+.updated-time{
+    width:10%;
+}
+
+.action-menu{
+    width:2%;
+}
+
+.view-projects-btn{
+    width:22%;
+    margin:auto;
+    display:block;
+} 
 
 @media screen and (max-width: 1100px) {
     .metric-grid,

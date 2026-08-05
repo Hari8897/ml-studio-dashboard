@@ -4,15 +4,16 @@
     gap: 20px;
 }
 
-.page-title,
-.panel {
+
+.upload-panel,
+.recent-panel {
     border: 1px solid #c4d2e4;
     border-radius: 8px;
     background: #ffffff;
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.045);
 }
 
-.page-title {
+.page-title{
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -20,7 +21,8 @@
     padding: 24px;
 }
 
-.page-title h1 {
+.page-title h1,
+.title h3 {
     margin: 0;
     color: #0f172a;
     font-size: 28px;
@@ -29,6 +31,7 @@
 }
 
 .page-title p,
+.title p,
 .panel-header p {
     margin: 8px 0 0;
     color: #64748b;
@@ -36,16 +39,62 @@
     line-height: 1.55;
 }
 
-.panel {
+.upload-panel {
     padding: 20px;
 }
 
-.panel h2 {
-    margin: 0;
-    color: #0f172a;
-    font-size: 18px;
-    font-weight: 650;
+.upload{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(233, 239, 250);
+    border: 1px dotted blue;
+    border-radius: 5px;
+    margin-top:15px ;
 }
+
+.upload-icon{
+    padding-top: 30px;
+    font-size: 100px;
+    color: #2563eb;
+}
+.upload button{
+    color: whitesmoke;
+    background-color: #2563eb;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    box-shadow: 0 0 0 3px rgba(110, 137, 197, 0.12);
+}
+.upload p{
+    padding-top: 20px;
+}
+
+.recent-panel{
+    padding: 12px;
+}
+
+.recent-dataset-table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.recent-dataset-table th,
+.recent-dataset-table td,
+.recent-dataset-table tr{
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+.upload-dataset-table th{
+    background: #f5f5f5;
+}
+.panel-title{ 
+    padding-bottom: 10px;
+}
+
 
 .panel-header {
     display: flex;
@@ -55,10 +104,9 @@
     margin-bottom: 18px;
 }
 
-.two-column {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
-    gap: 22px;
+.one-column {
+    display: flex;
+    flex-direction: column;
 }
 
 .field-group {

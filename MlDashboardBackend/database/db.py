@@ -46,31 +46,58 @@ def ensure_database_schema():
         for column in inspector.get_columns("datasets")
     }
 
+    user_columns = [
+        column["name"].lower()
+        for column in inspector.get_columns("users")
+    ]
+
+    PasswordResetToken_columns = [
+        column["name"].lower()
+        for column in inspector.get_columns("password_reset_tokens")
+    ]
+
+    
+
     statements = []
+    # dataset table query
     if "user_id" not in dataset_columns:
         statements.append("ALTER TABLE datasets ADD user_id INT NULL")
         dataset_columns.add("user_id")
-    if "username" not in dataset_columns:
-        statements.append("ALTER TABLE datasets ADD username VARCHAR(100) NULL")
-        dataset_columns.add("username")  
+    if "username" in dataset_columns:
+        statements.append("ALTER TABLE datasets drop username")
+        dataset_columns.add("username") 
+    if "datasetid" in dataset_columns:
+        statements.append("ALTER TABLE datasets RENAME COLUMN  datasetid to dataset_id")
+        dataset_columns.add("dataset_id")
+
+    
+
+
+
+    # Sql users table query
+    if "id" in user_columns:
+        statements.append("ALTER TABLE users RENAME COLUMN  id to user_id")
+        user_columns.append("user_id")
+    if "created_at" not in user_columns:
+        statements.append("ALTER TABLE users ADD created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+        user_columns.append("created_at")
+    if "updated_at" not in user_columns:
+        statements.append("ALTER TABLE users ADD updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+        user_columns.append("updated_at")
+    if "last_login" not in user_columns:
+        statements.append("ALTER TABLE users ADD last_login TIMESTAMP")
+        user_columns.append("last_login") 
+
+    # password_reset_tokens table query
+    if "token" in PasswordResetToken_columns:
+        statements.append("ALTER TABLE password_reset_tokens RENAME COLUMN  token to password_token")
+        PasswordResetToken_columns.append("password_token")
+
           
 
     with engine.begin() as connection:
         for statement in statements:
             connection.execute(text(statement))
-
-        if (
-            "user_id" in dataset_columns
-            and "username" in dataset_columns
-            and inspector.has_table("users")
-        ):
-            connection.execute(text("""
-                UPDATE datasets
-                SET username = users.username
-                FROM users
-                WHERE datasets.user_id = users.id
-                AND datasets.username IS NULL
-            """))
             
     #inspector = inspect(engine)
 

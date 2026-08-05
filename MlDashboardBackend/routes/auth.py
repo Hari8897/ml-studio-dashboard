@@ -12,10 +12,16 @@ from database.db_models import User, PasswordResetToken
 
 from utils.security import hash_password, verify_password
 from pydantic import BaseModel, EmailStr
+from dotenv import load_dotenv
+import os
 
 import socket
 
 router = APIRouter()
+
+
+FRONTEND_URL_DEV = os.getenv("FRONTEND_URL_DEV")
+FRONTEND_URL_PROD = os.getenv("FRONTEND_URL_PROD")
 
 @router.post("/register")
 def register(
@@ -95,7 +101,7 @@ def login(data: dict, db: Session = Depends(get_db)):
     return {
         "message": "Login successful",
         "user": {
-            "id": user.id,
+            "user_id": user.user_id,
             "username": user.username,
             "email": user.email
             }
@@ -128,7 +134,7 @@ async def forgot_password(
     token = str(uuid4())
 
     reset_token = PasswordResetToken(
-        user_id=user.id,
+        user_id=user.user_id,
         token=token,
         expires_at=datetime.utcnow() + timedelta(hours=1)
     )
@@ -137,7 +143,7 @@ async def forgot_password(
     db.commit()
     db.refresh(reset_token)
 
-    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+    frontend_url = os.getenv("FRONTEND_URL", "FRONTEND_URL_DEV").rstrip("/")
     reset_link = f"{frontend_url}/reset-password/{token}"
     email_body = build_password_reset_template(
         username=user.username or "there",
@@ -187,7 +193,7 @@ def reset_password(
         )
 
     user = db.query(User).filter(
-        User.id == reset_token.user_id
+        User.user_id == reset_token.user_id
     ).first()
 
     if not user:
