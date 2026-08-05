@@ -21,10 +21,10 @@ from models.model import trainModel
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from jose import jwt 
+from fastapi.security import OAuth2PasswordBearer
 
-
-
-
+from utils.security import SECRET_KEY, ALGORITHM, create_access_token, OAuth2AuthorizationCodeBearer
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
@@ -42,6 +42,25 @@ app.add_middleware(
     allow_methods = ["*"],
     allow_headers=["*"]
     )
+# Genereate JWT on login
+
+# access_token = create_access_token(
+#     data={"user_id": User.user_id}
+#     )
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+def get_current_user(
+        token: str=Depends(oauth2_scheme),
+        db:Session = Depends(get_db)
+):
+
+    payload = jwt.decode(token, SECRET_KEY, algorithms= [ALGORITHM])
+    user_id = payload.get("user_id")
+    user = db.query(User).filter(User.user_id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=40)
+    return user
 
 
 class DatasetRequest(BaseModel):
@@ -55,12 +74,14 @@ class DataRequest(BaseModel):
     target: str
 
 class PreprocessRequest(BaseModel):
+    dataset_id: int
     features: List[Dict[str, Any]]
     target: List[Any]
     options: Dict[str, Any]
 
 # ----------- Request Schema -----------
 class TrainRequest(BaseModel):
+    dataset_id: int
     features: List
     target: List
     featureNames: List  # important for feature importance
@@ -128,7 +149,7 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         db = SessionLocal()
         try:
             user =(db.query(User)
-                   .filter(User.id == user_id)
+                   .filter(User.user_id == user_id)
                    .first())
             if not user:
                 return {
@@ -136,8 +157,8 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
                     }
 
             new_dataset = Dataset(
-                user_id=user.id,
-                username=user.username,
+                user_id=user.user_id,
+                #username=user.username,
                 datasetname=file.filename,
                 # file_path=file_path,
 
@@ -163,7 +184,7 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         dataStore['df'] = df
 
         return {
-            "dataset_id": new_dataset.datasetid,
+            "dataset_id": new_dataset.dataset_id,
             "columns": df.columns.tolist(),
             "preview": df.head(10).to_dict(orient='records'),  # limit preview
             "filesize_mb": new_dataset.filesize_mb  
@@ -173,22 +194,40 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         print("UPLOAD ERROR:", str(e))
         return {"error": str(e)}
 
+
+@app.get
     
 @app.get("/datasets/{user_id}")
 async def get_user_dataset(user_id: int, db: Session = Depends(get_db)):
     datasets = (db.query(Dataset)
         .filter(Dataset.user_id== user_id)
+        .order_by(Dataset.dataset_id.desc())
+        .limit(5)
         .all()
         )
     return datasets 
 
-@app.get("/datasets-preview/{datasetid}")
+@app.get("/datasets/recent")
+async def get_recent_datasets(
+    current_user: User = Depends(get_current_user),
+    db: Session =Depends(get_db) 
+):
+    datasets = (db.query(Dataset)
+        .filter(Dataset.user_id== current_user.user_id)
+        .order_by(Dataset.dataset_id.desc())
+        .limit(5)
+        .all()
+        )
+    return datasets  
+    
+
+@app.get("/datasets-preview/{dataset_id}")
 async def get_dataset_preview(
-    datasetid: int,
-    db: Session = Depends(get_db)
+    dataset_id: int,
+    db: Session = Depends(get_db) 
     ):
     dataset = (db.query(Dataset)
-               .filter(Dataset.datasetid==datasetid)
+               .filter(Dataset.dataset_id==dataset_id)
                .first()
                )
     if not dataset:
@@ -214,14 +253,7 @@ async def get_dataset_preview(
                 detail="Dataset file data not found"
                 )
 
-        print("Dataset ID:", datasetid)
-        print("Dataset Name:", dataset.datasetname)
-        print("File Data Exists:", dataset.file_data is not None)
-
         contents = dataset.file_data
-
-        print("Contents Type:", type(contents))
-        print("Contents Length:", len(contents) if contents else 0)
 
         #CSV
         if dataset.datasetname.lower().endswith(".csv"):
@@ -252,7 +284,7 @@ async def get_dataset_preview(
             return {"error": "Dataset is empty"}
 
         return {
-            "datasetid": dataset.datasetid,
+            "dataset_id": dataset.dataset_id,
             "datasetname": dataset.datasetname,
             "columns": df.columns.tolist(),
             "preview": df.head(20).to_dict(orient="records"),
@@ -265,7 +297,7 @@ async def get_dataset_preview(
         raise
     except Exception as e:
         print("PREVIEW ERROR:", str(e))
-        raise HTTPException(status_code=500, detail=str(e));
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/selectTarget")
@@ -300,7 +332,7 @@ async def get_target(request: DataRequest):
 
 
 @app.post("/preprocess")
-async def preprocess(data: PreprocessRequest):
+async def preprocess(data: PreprocessRequest, dataset_id: int):
     print("preprocess", data)
     try:
         df= pd.DataFrame(data.features)
@@ -316,7 +348,7 @@ async def preprocess(data: PreprocessRequest):
         return {"error":str(e)}
 
 @app.post("/correlation")
-async def correlation(file: UploadFile=File(...)):
+async def correlation(file: UploadFile=File(...), dataset_id: int = None):
     contents = await file.read()
     df = pd.read_csv(io.StringIO(contents.decode("utf-8")))
     corr=df.corr(numeric_only=True)
@@ -329,7 +361,7 @@ async def correlation(file: UploadFile=File(...)):
 
 
 @app.post("/train")
-async def traiModel( data: TrainRequest):
+async def traiModel( data: TrainRequest, dataset_id: int = None):
     #print("Received Raw Data:",data)
     #return {"message":"received"}
     try:

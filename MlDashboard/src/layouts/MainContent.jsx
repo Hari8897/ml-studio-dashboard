@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import PreprocessData from "../components/Dataset/PreprocessData";
-import Table from "../components/Dataset/Table";
 import Results from "../components/Model/Result";
 import Heatmap from "../components/Dataset/Heatmap";
 import Home from "../pages/DashboardOverview";
 import "../styles/maincontent.css";
-import UploadSection from "../components/Dataset/UploadFile";
+import { useNavigate } from "react-router-dom";
+import PreprocessingPage from "../pages/PreprocessingPage";
+import UploadPage from "../pages/UploadPage";
 
 function MainContent({
     activeStep,
@@ -13,6 +13,7 @@ function MainContent({
     onUpload,
     columns,
     data,
+    datasetName,
     userDatasets,
     selectedDatasetId,
     setSelectedDatasetId,
@@ -54,252 +55,141 @@ function MainContent({
     const totalRows = data?.length || 0;
     const filteredRows = filteredData?.length || 0;
 
+    const navigate = useNavigate();
+    const openDataset = (datasetId) => {
+        const dataset = userDatasets.find(ds => ds.dataset_id === datasetId);
+        if (!dataset) {
+            console.error("Dataset not found:", datasetId);
+            return;
+        }
+        setSelectedDatasetId(datasetId);
+
+
+        navigate("/preprocess", {
+            state:{
+                datasetId:datasetId
+            }
+        })
+    }
+
+    
+
     switch (activeStep) {
         case "dashboard":
             return <DashboardOverview setActiveStep={setActiveStep} />;
 
         case "upload":
-            return (
-                <div className="workspace-page">
-                    <section className="page-title">
-                        <div>
-                            <span className="eyebrow">Data library</span>
-                            <h1>Upload and inspect datasets.</h1>
-                            <p>Add a dataset, reopen previous uploads, and search through the preview before preprocessing.</p>
-                        </div>
-                    </section>
-
-                    <section className="panel two-column">
-                        <div>
-                            <h2>Upload dataset</h2>
-                            <UploadSection onUpload={onUpload} />
-                        </div>
-                        <div className="field-group">
-                            <label>Select saved dataset</label>
-                            <select
-                                value={selectedDatasetId}
-                                onChange={(e) => setSelectedDatasetId(e.target.value)}
-                                required
-                            >
-                                <option value="">Select Dataset</option>
-                                {userDatasets.map(dataset => (
-                                    <option key={dataset.datasetid} value={dataset.datasetid}>
-                                        {dataset.datasetname}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </section>
-
-                    {data && data.length > 0 && (
-                        <section className="panel">
-                            <div className="panel-header">
-                                <div>
-                                    <h2>Dataset preview</h2>
-                                    <p>{columns.length} columns available for preprocessing.</p>
-                                </div>
-                                <div className="row-info">
-                                    <span>Total: <strong>{totalRows}</strong></span>
-                                    <span>Filtered: <strong>{filteredRows}</strong></span>
-                                </div>
-                            </div>
-
-                            <div className="toolbar">
-                                <input
-                                    className="search-input"
-                                    type="text"
-                                    placeholder="Search rows"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                                <select
-                                    className="column-dropdown"
-                                    value={selectedColumn}
-                                    onChange={(e) => setSelectedColumn(e.target.value)}
-                                >
-                                    <option value="">All columns</option>
-                                    {columns.map((col, index) => (
-                                        <option key={index} value={col}>{col}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <Table data={data} columns={columns} filteredData={filteredData} />
-                        </section>
-                    )}
-                </div>
-            );
+            return (<UploadPage 
+                onUpload={onUpload} 
+                data={data} 
+                userDatasets={userDatasets} 
+                openDataset={openDataset} 
+                columns={columns} 
+                totalRows={totalRows} 
+                filteredRows={filteredRows} 
+                searchTerm={searchTerm} 
+                setSearchTerm={setSearchTerm} 
+                selectedColumn={selectedColumn} 
+                setSelectedColumn={setSelectedColumn} 
+                filteredData={filteredData} 
+                selectedDatasetId={selectedDatasetId} 
+                setSelectedDatasetId={setSelectedDatasetId}/>);
+;
 
         case "preprocess":
-            return (
-                <div className="workspace-page">
-                    <section className="page-title">
-                        <div>
-                            <span className="eyebrow">Preprocessing</span>
-                            <h1>Prepare data for model training.</h1>
-                            <p>Select a target column and apply missing value, encoding, and scaling strategies.</p>
-                        </div>
-                        <button className="primary-action" type="button" onClick={handlePreprocess}>
-                            Run Preprocessing
-                        </button>
-                    </section>
+            return <PreprocessingPage  
+            setOptions={setOptions} 
+            setTarget={setTarget} 
+            handlePreprocess = {handlePreprocess} 
+            columns={columns} 
+            features={features} 
+            targetData={targetData} 
+            options={options}
+            selectedDatasetId = {selectedDatasetId} 
+            datasetName = {datasetName}
+            />
 
-                    <section className="panel control-panel">
-                        <div className="field-group">
-                            <label>Target column</label>
-                            <select onChange={(e) => setTarget(e.target.value)} required>
-                                <option value="">Select Target</option>
-                                {columns.map((col, i) => (
-                                    <option key={i} value={col}>{col}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="field-group">
-                            <label>Numerical missing values</label>
-                            <select
-                                value={options.missing_num}
-                                onChange={(e) => setOptions({ ...options, missing_num: e.target.value })}
-                                required
-                            >
-                                <option value="mean">Mean</option>
-                                <option value="median">Median</option>
-                                <option value="drop">Drop</option>
-                            </select>
-                        </div>
-                        <div className="field-group">
-                            <label>Categorical missing values</label>
-                            <select
-                                value={options.missing_cat}
-                                onChange={(e) => setOptions({ ...options, missing_cat: e.target.value })}
-                                required
-                            >
-                                <option value="mode">Mode</option>
-                            </select>
-                        </div>
-                        <div className="field-group">
-                            <label>Encoding</label>
-                            <select
-                                value={options.encoding}
-                                onChange={(e) => setOptions({ ...options, encoding: e.target.value })}
-                                required
-                            >
-                                <option value="onehot">One-Hot</option>
-                                <option value="label">Label</option>
-                            </select>
-                        </div>
-                        <div className="field-group">
-                            <label>Scaling</label>
-                            <select
-                                value={options.scaling}
-                                onChange={(e) => setOptions({ ...options, scaling: e.target.value })}
-                                required
-                            >
-                                <option value="none">None</option>
-                                <option value="standard">Standard</option>
-                                <option value="minmax">Min-Max</option>
-                            </select>
-                        </div>
-                    </section>
+        case "train":
+            return (<TrainingPage
+                columns={columns}
+                dropColumns={dropColumns}/>);
+                // <div className="workspace-page">
+                //     <section className="page-title">
+                //         <div>
+                //             <span className="eyebrow">Modeling</span>
+                //             <h1>Train and review model output.</h1>
+                //             <p>Drop unwanted columns, train the model, then inspect score, predictions, and feature importance.</p>
+                //         </div>
+                //         <button
+                //             className="primary-action"
+                //             type="button"
+                //             onClick={() => {
+                //                 handleModelTraining();
+                //                 setActiveStep("train");
+                //             }}
+                //         >
+                //             Train Model
+                //         </button>
+                //     </section>
 
-                    <section className="summary-strip">
-                        <span>Features: <strong>{features?.length || 0}</strong> rows</span>
-                        <span>Target: <strong>{targetData?.length || 0}</strong> rows</span>
-                        <span>Encoding: <strong>{options.encoding}</strong></span>
-                        <span>Scaling: <strong>{options.scaling}</strong></span>
-                    </section>
+                //     <section className="panel">
+                //         <div className="panel-header training-header">
+                //             <div>
+                //                 <h2>Training setup</h2>
+                //                 <p>Select columns to remove before training.</p>
+                //             </div>
+                //             {dropColumns.length > 0 && (
+                //                 <button
+                //                     className="secondary-action"
+                //                     type="button"
+                //                     onClick={() => setDropColumns([])}
+                //                 >
+                //                     Clear
+                //                 </button>
+                //             )}
+                //         </div>
 
-                    <section className="panel">
-                        <div className="panel-header">
-                            <div>
-                                <h2>Processed data</h2>
-                                <p>Preview of transformed feature and target samples.</p>
-                            </div>
-                        </div>
-                        <PreprocessData features={features} targetData={targetData} />
-                    </section>
-                </div>
-            );
+                //         <div className="drop-column-grid" aria-label="Drop unwanted columns">
+                //             {columns.length === 0 ? (
+                //                 <div className="empty-state">Upload and preprocess a dataset to choose columns.</div>
+                //             ) : (
+                //                 columns.map((col, i) => {
+                //                     const checked = dropColumns.includes(col);
 
-        case "result":
-            return (
-                <div className="workspace-page">
-                    <section className="page-title">
-                        <div>
-                            <span className="eyebrow">Modeling</span>
-                            <h1>Train and review model output.</h1>
-                            <p>Drop unwanted columns, train the model, then inspect score, predictions, and feature importance.</p>
-                        </div>
-                        <button
-                            className="primary-action"
-                            type="button"
-                            onClick={() => {
-                                handleModelTraining();
-                                setActiveStep("result");
-                            }}
-                        >
-                            Train Model
-                        </button>
-                    </section>
+                //                     return (
+                //                         <label className="drop-column-option" key={`${col}-${i}`}>
+                //                             <input
+                //                                 type="checkbox"
+                //                                 checked={checked}
+                //                                 onChange={(e) => {
+                //                                     if (e.target.checked) {
+                //                                         setDropColumns([...dropColumns, col]);
+                //                                         return;
+                //                                     }
 
-                    <section className="panel">
-                        <div className="panel-header training-header">
-                            <div>
-                                <h2>Training setup</h2>
-                                <p>Select columns to remove before training.</p>
-                            </div>
-                            {dropColumns.length > 0 && (
-                                <button
-                                    className="secondary-action"
-                                    type="button"
-                                    onClick={() => setDropColumns([])}
-                                >
-                                    Clear
-                                </button>
-                            )}
-                        </div>
+                //                                     setDropColumns(dropColumns.filter((column) => column !== col));
+                //                                 }}
+                //                             />
+                //                             <span>{col}</span>
+                //                         </label>
+                //                     );
+                //                 })
+                //             )}
+                //         </div>
 
-                        <div className="drop-column-grid" aria-label="Drop unwanted columns">
-                            {columns.length === 0 ? (
-                                <div className="empty-state">Upload and preprocess a dataset to choose columns.</div>
-                            ) : (
-                                columns.map((col, i) => {
-                                    const checked = dropColumns.includes(col);
+                //         {dropColumns.length > 0 && (
+                //             <div className="selected-columns">
+                //                 {dropColumns.map((col) => (
+                //                     <span key={col}>{col}</span>
+                //                 ))}
+                //             </div>
+                //         )}
+                //     </section>
 
-                                    return (
-                                        <label className="drop-column-option" key={`${col}-${i}`}>
-                                            <input
-                                                type="checkbox"
-                                                checked={checked}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setDropColumns([...dropColumns, col]);
-                                                        return;
-                                                    }
-
-                                                    setDropColumns(dropColumns.filter((column) => column !== col));
-                                                }}
-                                            />
-                                            <span>{col}</span>
-                                        </label>
-                                    );
-                                })
-                            )}
-                        </div>
-
-                        {dropColumns.length > 0 && (
-                            <div className="selected-columns">
-                                {dropColumns.map((col) => (
-                                    <span key={col}>{col}</span>
-                                ))}
-                            </div>
-                        )}
-                    </section>
-
-                    <section className="panel">
-                        <Results results={results} />
-                    </section>
-                </div>
-            );
+                //     <section className="panel">
+                //         <Results results={results} />
+                //     </section>
+                // </div>
 
         case "visualize":
             return (

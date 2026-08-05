@@ -89,16 +89,15 @@ export const uploadFile = async (file) => {
 
 
         const user = getStoredUser();
-        if (!user?.id) {
+        if (!user?.user_id) {
             throw new Error(
                 "User not logged in."
             )
         }
-        console.log("User data for upload:", user);
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("user_id", user.id);
-        formData.append("username", user.username);
+        formData.append("user_id", user.user_id);
+        //formData.append("username", user.username);
 
         const response = await fetch(
             `${API_BASE_URL}/upload`, 
@@ -119,14 +118,21 @@ export const uploadFile = async (file) => {
 // user specific datasets
 // getting userId and metadata
 export const getUserDatasets = async (userId) =>{
-    const response = await  axios.get(`${API_BASE_URL}/datasets/${userId}`);
-    return response.data;
-}
+    try {
+        const response = await  axios.get(`${API_BASE_URL}/datasets/${userId}`);
+        return response.data;
+    } catch (error){
+        console.error("Recent_datasets_error", error);
+        throw error;
+    }
+
+};
 
 // getting dataset with datasetid
 export const getDatasetPreview = async (datasetid) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/datasets-preview/${datasetid}`);
+        console.log("Recent Datasets:", response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching dataset preview:", error);

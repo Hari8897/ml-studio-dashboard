@@ -40,7 +40,7 @@ function AuthForm (){
                 const user = loginData.user;
                 //console.log("User:", user);
                 
-                if (!user || !user.id) {
+                if (!user || !user.user_id) {
                     console.error("Login response: ", loginData);
                     alert("Login response is missing user details.");
                     return;

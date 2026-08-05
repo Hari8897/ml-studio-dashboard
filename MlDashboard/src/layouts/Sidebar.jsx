@@ -72,9 +72,9 @@ const Sidebar=({
                                 <span className="menu-icon">{icon}</span>
                                 <span>{label}</span>
                             </li>
-                        ))};
+                        ))}
                     </div>
-                ))};
+                ))}
                 </ul>
                 
             </div>

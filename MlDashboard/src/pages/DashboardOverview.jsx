@@ -56,10 +56,13 @@ const DashboardOverview = ({ setActiveStep }) => {
             <section className="stat-grid">
                 {stats.map((stat)=>(
                     <article className="stat-card" key={stat.label}>
-                        <span className={`stat-icon ${stat.color}`}>
-                            {stat.icon}
-                        </span>
-                        <div>
+                        <div className="stat-icon-section">
+                            <span className={`stat-icon ${stat.color}`}>
+                                {stat.icon}
+                            </span>
+                        </div>
+
+                        <div className="stat-info">
                             <p>{stat.label}</p>
                             <strong>{stat.value}</strong>
                             <small>{stat.description}</small>
@@ -68,54 +71,87 @@ const DashboardOverview = ({ setActiveStep }) => {
                 )
                 )}
             </section>
-            <section className="metric-grid">
+            <div className="dashboard-overview">
+                <section className="dashboard-overview-left">
+                    {/* Top Row */}
+                    <div className="dashboard-top">
 
-                <div className="metric-card">
-                    <span>Workflow</span>
-                    <strong>5 Steps</strong>
-                    <p>Upload to results</p>
-                </div>
-                <div className="metric-card">
-                    <span>Supported Files</span>
-                    <strong>CSV, XLSX</strong>
-                    <p>Preview before training</p>
-                </div>
-                <div className="metric-card">
-                    <span>Processing</span>
-                    <strong>Ready</strong>
-                    <p>Missing values, encoding, scaling</p>
-                </div>
-                <div className="metric-card">
+                        {/* Performance Chart */}
+                        <section className="performance-card card">
+                            <div className="card-header">
+                                <h3 className="card-title">Model Performance Overview</h3>
+                                <div className="card-filter">Last 7 days</div>
+                            </div>
 
-                </div>
-                <div className="metric-card">
+                            <div className="performance-chart">
+                                {/* Chart */}
+                            </div>
+                        </section>
 
-                </div>
-            </section>
+                        {/* Dataset Distribution */}
+                        <section className="distribution-card card">
+                            <div className="card-header">
+                                <h3 className="card-title">Dataset Distribution</h3>
+                            </div>
 
-            <section className="page-heading">
-                <button className="primary-action" type="button" onClick={() => setActiveStep("upload")}>
-                    <FaDatabase />
-                    Upload Dataset
-                </button>
-            </section>
+                            <div className="distribution-chart"></div>
+                        </section>
 
+                    </div>
 
+                    {/* Bottom Row */}
+                    <div className="dashboard-bottom">
+                        <section className="projects-card card">
+                            <div className="card-header">
+                                <h3 className="card-title">Recent Projects</h3>
+                            </div>
+                            <table className="projects-table">
+                                <thead className="table-head">
+                                </thead>
+                                <tbody className="table-body">
+                                    <tr className="project-row">
+                                        <td className="project-name"></td>
+                                        <td className="dataset-name"></td>
+                                        <td className="model-name"></td>
+                                        <td className="accuracy-score"></td>
+                                        <td className="status-cell">
+                                            <span className="status completed"></span>
+                                        </td>
+                                        <td className="updated-time"></td>
+                                        <td className="action-menu"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div className="projects-footer">
+                                <button className="view-projects-btn">
+                                    View All Projects
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                </section>
 
-            <section className="action-grid">
-                {actions.map((action) => (
-                    <button
-                        key={action.title}
-                        className="action-card"
-                        type="button"
-                        onClick={() => setActiveStep(action.step)}
-                    >
-                        <span className="action-icon">{action.icon}</span>
-                        <span className="action-title">{action.title}</span>
-                        <span className="action-text">{action.text}</span>
+                {/* Activity */}
+                <section className="activity-card card">
+                    <div className="card-header">
+                        <h3 className="card-title">Recent Activities</h3>
+                    </div>
+                    <div className="activity-list">
+                        <div className="activity-item">
+                            <div className="activity-icon"></div>
+                            <div className="activity-content">
+                                <h5 className="activity-title"></h5>
+                                <p className="activity-description"></p>
+                                <span className="activity-time"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button className="activity-btn">
+                        View All Activities
                     </button>
-                ))}
-            </section>
+                </section>
+            </div>
         </div>
     );
 };
