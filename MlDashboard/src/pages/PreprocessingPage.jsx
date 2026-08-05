@@ -17,6 +17,7 @@ export default function PreprocessingPage({
         const handleClickStep = (step) => {
             // Logic to handle step click, e.g., update state or navigate
             console.log(`Clicked on step: ${step} ${preprocessingSteps[step - 1]?.title}`);
+
              };  
 
 
@@ -39,6 +40,30 @@ export default function PreprocessingPage({
                 ))}
             </section>
             <section>
+                {preprocessingSteps[0].step === 1 && (
+                    <div className="step-content">
+                        <h3>Overview</h3>
+                        <p>This is the overview section for the preprocessing steps.</p>
+                    </div>
+                )}
+                {preprocessingSteps[1].step === 2 && (
+                    <div className="step-content">
+                        <h3>Handle Missing Values</h3>
+                        <p>Here you can handle missing values in your dataset.</p>
+                    </div>
+                )}
+                {preprocessingSteps[2].step === 3 && (
+                    <div className="step-content">
+                        <h3>Encoding</h3>
+                        <p>Here you can apply encoding strategies to your dataset.</p>
+                    </div>
+                )}
+                {preprocessingSteps[3].step === 4 && (
+                    <div className="step-content">
+                        <h3>Scaling</h3>
+                        <p>Here you can apply scaling strategies to your dataset.</p>
+                    </div>
+                )}
             </section>
 
             <section className="summary-strip">
