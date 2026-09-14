@@ -78,7 +78,7 @@ function UploadSection({ onUpload }) {
                     required
                 />
                 {fileName && (<p>Selected:{fileName}</p>)}
-                <p>Supported format:CSV, Excel (Max. 100MB)</p>                           
+                <p>Supported format: CSV, Excel (Max. 100MB)</p>                           
                 </div>
 
             </section>

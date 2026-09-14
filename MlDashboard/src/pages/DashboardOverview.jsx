@@ -6,35 +6,35 @@ import { FaChartBar, FaDatabase, FaPlay, FaSlidersH,FaCalendarAlt,
 import "../styles/dashboardoverview.css";
 import PageHeader from "../components/DashboardOverview/PageHeader";
 
-const DashboardOverview = ({ setActiveStep }) => {
-    const actions = [
-        {
-            title: "Upload Data",
-            text: "Import CSV or Excel files and preview rows before modeling.",
-            icon: <FaDatabase />,
-            step: "upload",
-        },
-        {
-            title: "Preprocess",
-            text: "Choose target columns, handle missing values, encode, and scale.",
-            icon: <FaSlidersH />,
-            step: "preprocess",
-        },
-        {
-            title: "Visualize",
-            text: "Inspect correlations and patterns before training.",
-            icon: <FaChartBar />,
-            step: "visualize",
-        },
-        {
-            title: "Train Model",
-            text: "Run model training and review predictions and feature importance.",
-            icon: <FaPlay />,
-            step: "result",
-        },
+const DashboardOverview = () => {
+    // const actions = [
+    //     {
+    //         title: "Upload Data",
+    //         text: "Import CSV or Excel files and preview rows before modeling.",
+    //         icon: <FaDatabase />,
+    //         step: "upload",
+    //     },
+    //     {
+    //         title: "Preprocess",
+    //         text: "Choose target columns, handle missing values, encode, and scale.",
+    //         icon: <FaSlidersH />,
+    //         step: "preprocess",
+    //     },
+    //     {
+    //         title: "Visualize",
+    //         text: "Inspect correlations and patterns before training.",
+    //         icon: <FaChartBar />,
+    //         step: "visualize",
+    //     },
+    //     {
+    //         title: "Train Model",
+    //         text: "Run model training and review predictions and feature importance.",
+    //         icon: <FaPlay />,
+    //         step: "result",
+    //     },
 
 
-    ];
+    // ];
     const stats = [
         { label: "Datasets", value: "12", description: "2 this week", icon: <FaDatabase />, color: "purple" },
         { label: "Models Trained", value: "7", description: "1 this week", icon: <FaBrain />, color: "green" },

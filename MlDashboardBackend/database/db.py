@@ -105,7 +105,6 @@ try:
     with engine.connect() as connection:
         connection.execute(text("SELECT 1"))
 except Exception as e:
-    print(f"Database connection failed: {e}")
     raise
 
 def get_db():

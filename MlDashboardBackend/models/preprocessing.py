@@ -5,6 +5,60 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, LabelEncoder
 
 
+def generate_dataset_overview(df):
+    total_rows = len(df)
+    total_columns = len(df.columns)
+
+    total_cells = total_rows + total_columns
+
+    missing_cells = df.isna().sum().sum()
+
+    missing_percentage = (
+        (missing_cells/total_cells)* 100 
+        if total_cells >0
+        else 0
+    )
+
+    categorical_columns = len(df.select_dtypes(include = ['object',"category"]).columns)
+    numerical_columns = len(df.select_dtypes(include = ["number"]).columns) 
+
+    duplicate_rows = df.duplicated().sum()
+
+    duplicate_percentage = (
+        (duplicate_rows / total_rows) * 100
+        if total_rows >0
+        else 0
+    )
+
+    columns = []
+    
+    for column in df.columns:
+        if pd.api.types.is_numeric_dtype(df[column]):
+            data_type = "numerical"
+        else: 
+            data_type = "categorical"
+
+        sample_values = (
+            df[column].dropna().head(3).tolist()
+        )
+        columns.append({
+            "name": column,
+            "data_type": data_type,
+            "missing_values": int(df[column].isna().sum()),
+            "unique": int(df[column].nunique(dropna=True)),
+            "sample_values": sample_values
+        })
+
+    return {
+        "total_rows": total_rows,
+        "total_columns":total_columns,
+        "missing_percentage": round(missing_percentage,2),
+        "categorical_columns": categorical_columns,
+        "numerical_columns": numerical_columns,
+        "duplicate_percentage" : round(duplicate_percentage, 2),
+        "columns": columns
+    }
+
 def preprocessData(df, options):
     # Columns selection
     if options.get("columns"):

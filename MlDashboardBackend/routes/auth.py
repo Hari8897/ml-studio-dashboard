@@ -19,7 +19,6 @@ import socket
 
 router = APIRouter()
 
-
 FRONTEND_URL_DEV = os.getenv("FRONTEND_URL_DEV")
 FRONTEND_URL_PROD = os.getenv("FRONTEND_URL_PROD")
 
@@ -28,7 +27,6 @@ def register(
     data: dict,
     db: Session = Depends(get_db)
 ):
-
     try:
         required_fields = ("username", "email", "password")
         missing_fields = [field for field in required_fields if not data.get(field)]
@@ -36,13 +34,11 @@ def register(
             return {
                 "error": f"Missing required field(s): {', '.join(missing_fields)}"
             }
-
         existing_user = db.query(User).filter(
             User.email == data["email"]
         ).first()
 
         if existing_user:
-
             return {
                 "error": "Email already exists"
             }
@@ -58,9 +54,7 @@ def register(
         )
 
         db.add(new_user)
-
         db.commit()
-
         db.refresh(new_user)
         
         #print("Registered user:", new_user.username)
@@ -70,9 +64,6 @@ def register(
         }
 
     except Exception as e:
-
-        print("REGISTER ERROR:", str(e))
-
         return {
             "error": str(e)
         }
@@ -92,7 +83,6 @@ async def smtp_test():
         }
 
 
-
 @router.post("/login")
 def login(data: dict, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == data["email"]).first()
@@ -110,7 +100,6 @@ def login(data: dict, db: Session = Depends(get_db)):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
-
 
 class ResetPasswordRequest(BaseModel):
     token: str
@@ -160,7 +149,7 @@ async def forgot_password(
     try:
         await FastMail(conf).send_message(message)
     except Exception as e:
-        print("PASSWORD RESET EMAIL ERROR:", repr(e))
+        # print("PASSWORD RESET EMAIL ERROR:", repr(e))
         raise HTTPException(
             status_code=500,
             detail=f"Could not send reset email: {str(e)}"
