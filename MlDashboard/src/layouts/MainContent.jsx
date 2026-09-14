@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import Results from "../components/Model/Result";
-import Heatmap from "../components/Dataset/Heatmap";
 import Home from "../pages/DashboardOverview";
 import "../styles/maincontent.css";
 import { useNavigate } from "react-router-dom";
 import PreprocessingPage from "../pages/PreprocessingPage";
 import UploadPage from "../pages/UploadPage";
+import VisualizationPage from "../pages/VisualizationPage";
 
 function MainContent({
     activeStep,
@@ -17,6 +17,8 @@ function MainContent({
     userDatasets,
     selectedDatasetId,
     setSelectedDatasetId,
+    overview,
+    columnSummary,
     features,
     targetData,
     results,
@@ -97,7 +99,12 @@ function MainContent({
 ;
 
         case "preprocess":
-            return <PreprocessingPage  
+            return <PreprocessingPage
+            datasetId = {selectedDatasetId} 
+            datasetName = {datasetName}
+            overview = {overview}
+            columnSummary = {columnSummary}
+            tableData = {data}
             setOptions={setOptions} 
             setTarget={setTarget} 
             handlePreprocess = {handlePreprocess} 
@@ -105,9 +112,14 @@ function MainContent({
             features={features} 
             targetData={targetData} 
             options={options}
-            selectedDatasetId = {selectedDatasetId} 
-            datasetName = {datasetName}
+
             />
+
+
+        case "visualize":
+            return (
+                <VisualizationPage datasetName={datasetName} columns={columns}/>
+            );
 
         case "train":
             return (<TrainingPage
@@ -191,40 +203,7 @@ function MainContent({
                 //     </section>
                 // </div>
 
-        case "visualize":
-            return (
-                <div className="workspace-page">
-                    <section className="page-title">
-                        <div>
-                            <span className="eyebrow">Visualization</span>
-                            <h1>Explore relationships in your dataset.</h1>
-                            <p>Use visual checks to understand correlation and feature behavior before training.</p>
-                        </div>
-                    </section>
 
-                    <section className="panel">
-                        <div className="panel-header">
-                            <div>
-                                <h2>Correlation heatmap</h2>
-                                <p>Numeric-column correlation view.</p>
-                            </div>
-                        </div>
-                        <div className="chart-box">
-                            <Heatmap />
-                        </div>
-                    </section>
-
-                    <section className="panel">
-                        <div className="panel-header">
-                            <div>
-                                <h2>Feature importance</h2>
-                                <p>Feature importance appears after model training.</p>
-                            </div>
-                        </div>
-                        <div className="empty-chart">Train a model to populate this chart.</div>
-                    </section>
-                </div>
-            );
 
         default:
             return <Home setActiveStep={setActiveStep} />;

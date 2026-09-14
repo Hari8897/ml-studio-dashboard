@@ -16,7 +16,7 @@ from database.db_models import Dataset, User
 
 from routes.auth import router as auth_router
 
-from models.preprocessing import preprocessData, preprocessTarget
+from models.preprocessing import preprocessData, preprocessTarget, generate_dataset_overview
 from models.model import trainModel
 
 from fastapi.staticfiles import StaticFiles
@@ -191,11 +191,8 @@ async def upload(user_id: int = Form(...), file: UploadFile = File(...)):
         }
 
     except Exception as e:
-        print("UPLOAD ERROR:", str(e))
         return {"error": str(e)}
 
-
-@app.get
     
 @app.get("/datasets/{user_id}")
 async def get_user_dataset(user_id: int, db: Session = Depends(get_db)):
@@ -234,32 +231,23 @@ async def get_dataset_preview(
         raise HTTPException(
             status_code=404,
             detail="Dataset not found"
+        )
+
+    contents = dataset.file_data
+    
+    if contents is None:
+        raise HTTPException(
+            status_code=404, 
+            detail="Dataset file data not found"
             )
-    # file_path = dataset.file_path
-
-    # if not os.path.exists(file_path):
-    #     raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
-    try: 
-        # if file_path.endswith(".csv"):
-        #     df = pd.read_csv(file_path)
-        # elif file_path.endswith((".xlsx",".xls")):
-        #     df = pd.read_excel(file_path)
-  
-        contents = dataset.file_data
-
-        if contents is None:
-            raise HTTPException(
-                status_code=404, 
-                detail="Dataset file data not found"
-                )
-
-        contents = dataset.file_data
+    
+    try:     
 
         #CSV
         if dataset.datasetname.lower().endswith(".csv"):
             try:
                 decoded = contents.decode("utf-8-sig")
-            except:
+            except UnicodeDecodeError:
                 decoded = contents.decode("latin-1")
 
             s = io.StringIO(decoded)  
@@ -278,14 +266,29 @@ async def get_dataset_preview(
              raise HTTPException(status_code=400, detail="Unsupported file format")
 
 
-        if df is not None and not df.empty:
-            dataStore['df'] = df
-        else:
+        if df is None or  df.empty:
+
             return {"error": "Dataset is empty"}
+
+        #store dataframe
+        dataStore['df'] = df
+
+        #Generate metadata
+        overview = generate_dataset_overview(df)
 
         return {
             "dataset_id": dataset.dataset_id,
             "datasetname": dataset.datasetname,
+
+            "overview": {
+                "total_rows":overview["total_rows"],
+                "total_columns":overview["total_columns"],
+                "missing_percentage": overview["missing_percentage"],
+                "categorical_columns": overview["categorical_columns"],
+                "numerical_columns": overview["numerical_columns"],
+                "duplicate_percentage":overview["duplicate_percentage"]
+            },
+            "columns_summary": overview["columns"],
             "columns": df.columns.tolist(),
             "preview": df.head(20).to_dict(orient="records"),
             "shape": {
@@ -296,8 +299,9 @@ async def get_dataset_preview(
     except HTTPException:
         raise
     except Exception as e:
-        print("PREVIEW ERROR:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
+
+
 
 
 @app.post("/selectTarget")
@@ -318,7 +322,6 @@ async def get_target(request: DataRequest):
         # Split data
         X = df.drop(columns=[target])
         y = df[[target]]
-        print("features", X)
         return {
             "features": X.to_dict(orient="records"),
             "target": y.to_dict(orient="records"),
@@ -333,7 +336,6 @@ async def get_target(request: DataRequest):
 
 @app.post("/preprocess")
 async def preprocess(data: PreprocessRequest, dataset_id: int):
-    print("preprocess", data)
     try:
         df= pd.DataFrame(data.features)
         target= data.target
@@ -374,7 +376,6 @@ async def traiModel( data: TrainRequest, dataset_id: int = None):
         return results
         
     except Exception as e:
-        print("TRAINING ERROR:", str(e))
         return {"error":str(e)} 
     
     

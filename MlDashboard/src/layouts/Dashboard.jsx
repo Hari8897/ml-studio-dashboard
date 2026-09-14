@@ -27,7 +27,7 @@ const STEP_ROUTES = {
 function Dashboard() {
     const location = useLocation();
     const navigate = useNavigate();
-    const activeStep = ROUTE_STEPS[location.pathname] || "home";
+    const activeStep = ROUTE_STEPS[location.pathname] || "home" ;
     const setActiveStep = (step) => navigate(STEP_ROUTES[step] || "/dashboard");
     const [userDatasets, setUserDatasets] = useState([]);
     const [selectedDatasetId, setSelectedDatasetId] = useState("");
@@ -48,6 +48,9 @@ function Dashboard() {
     const [dropColumns, setDropColumns] = useState([]);
 
     const [datasetName, setDatasetName] = useState("");
+
+    const [datasetOveview, setDatasetOverview] = useState(null);
+    const [columnSummary, setColumnSummary] = useState([])
   
 
 
@@ -89,8 +92,10 @@ function Dashboard() {
                 const data = await getDatasetPreview(selectedDatasetId);
                 //console.log("Dataset Preview:", data);
                 setDatasetName(data.datasetname || "Unknown");
-                setColumns(data.columns);
-                setTableData(data.preview);
+                setColumns(data.columns || []);
+                setTableData(data.preview ||[]);
+                setDatasetOverview(data.overview || null);
+                setColumnSummary(data.columns_summary || []);
             } catch (error) {
                 console.error("Error loading dataset preview:", error);
             };
@@ -202,7 +207,6 @@ function Dashboard() {
             filteredColumns,
         );
 
-
         //console.log("Train Response:", response);
 
         if (response) {
@@ -212,9 +216,6 @@ function Dashboard() {
             console.error("training failed at handlemodeltraining.")
         }
     };       
-
-   
-
 
     return (
         <div className="dashboard-container">               
@@ -246,6 +247,10 @@ function Dashboard() {
                         setUserDatasets={setUserDatasets}
                         selectedDatasetId={selectedDatasetId}
                         setSelectedDatasetId={setSelectedDatasetId}
+
+                        overview={datasetOveview}
+                        columnSummary={columnSummary}
+
                         features={features}
                         targetData={targetData}
                         results={results}
