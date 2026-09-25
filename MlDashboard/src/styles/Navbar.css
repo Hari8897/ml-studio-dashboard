@@ -58,11 +58,11 @@ input {
 .brand-mark {
     width: 40px;
     height: 40px;
-    display: grid;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
     place-items: center;
     border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff;
     font-size: 13px;
     font-weight: 850;
 }
@@ -85,6 +85,19 @@ input {
     color: #94a3b8;
     font-size: 12px;
     font-weight: 700;
+}
+
+button.studio-brand {
+    display: flex;
+    gap: 10px;
+    border: none;
+    background-color: #ffffff;
+    /* color:#2563eb */
+}
+
+.logo span{
+    display: flex;
+    flex-direction: column;
 }
 
 .nav-center {

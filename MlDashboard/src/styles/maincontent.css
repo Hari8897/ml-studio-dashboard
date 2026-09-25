@@ -17,8 +17,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 22px;
-    padding: 24px;
+    gap: 20px;
 }
 
 .page-title h1,
@@ -260,6 +259,9 @@
     color: #475569;
     font-size: 13px;
 }
+.summary-strip {
+    margin-top: 10px;
+}
 
 .row-info strong,
 .summary-strip strong {
@@ -269,7 +271,8 @@
 .control-panel {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 16px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .summary-strip {

@@ -132,7 +132,7 @@ export const getUserDatasets = async (userId) =>{
 export const getDatasetPreview = async (datasetid) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/datasets-preview/${datasetid}`);
-        console.log("Recent Datasets:", response.data)
+        console.log("Recent Datasets:", response.data) 
         return response.data;
     } catch (error) {
         console.error("Error fetching dataset preview:", error);

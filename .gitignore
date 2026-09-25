@@ -1,6 +1,7 @@
 # React
 node_modules/
 dist/
+sample.jsx
 
 # Python
 venv/
